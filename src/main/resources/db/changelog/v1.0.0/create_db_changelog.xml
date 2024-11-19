@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--Category-->
+    <changeSet id="1" author="o11ezha">
+        <createTable tableName="category">
+            <column name="category_id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="colour" type="varchar(7)"/>
+            <column name="account_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamptz" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--Task-->
+    <changeSet id="2" author="o11ezha">
+        <createTable tableName="task">
+            <column name="task_id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hours" type="decimal(4,1)"/>
+            <column name="category_id" type="uuid" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamptz" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseTableName="task" baseColumnNames="category_id"
+                                 constraintName="fk_task_category"
+                                 referencedTableName="category" referencedColumnNames="category_id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

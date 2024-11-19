@@ -1,0 +1,1002 @@
+openapi: 3.0.1
+info:
+  title: ToDo Service API
+  description: "API для создания, получения, редактирования и удаления планов."
+  contact:
+    name: o11ezha
+  version: "1.0"
+servers:
+  - url: http://localhost:8080
+    description: Локально развёрнутое приложение
+tags:
+  - name: Category controller
+    description: Контроллер для работы с категорией задания
+  - name: Task controller
+    description: Контроллер для работы с заданием
+paths:
+  /task/{taskid}:
+    get:
+      tags:
+        - Task controller
+      summary: Получение задания по ID
+      description: Получение информации о задании по уникальному ID
+      operationId: getTask
+      parameters:
+        - name: taskid
+          in: path
+          description: Уникальный ID задания
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 0deb8393-bf1f-4e3c-905d-4830c60cc687
+      responses:
+        "200":
+          description: Информация о задании получена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+              examples:
+                Task-by-ID:
+                  description: Ответ с информацией о задании
+                  value:
+                    createdAt: 2024-11-15T17:49:34.7376745
+                    updatedAt: 2024-11-15T17:49:34.7376745
+                    version: 1
+                    taskID: 0deb8393-bf1f-4e3c-905d-4830c60cc687
+                    taskTitle: TaskTitle2
+                    taskDescription: TaskDescription
+                    taskStatus: INPROGRESS
+                    taskDate: 2024-11-13T00:00:00.000+00:00
+                    taskHours: 2.5
+                    taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+        "400":
+          description: Запрашиваемый ID задания не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "taskID: Invalid task ID format"
+        "404":
+          description: Задание по запрашиваемому ID не найдено
+          content:
+            application/json:
+              examples:
+                task-not-found:
+                  description: Задание не найдено
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T17:59:48.345854Z
+                    error: TaskNotFoundException
+                    message: Task with ID 0deb8393-bf1f-4e3c-905d-4830c60cc687 not
+                      found
+    put:
+      tags:
+        - Task controller
+      summary: Изменение задания
+      description: "Изменяет уже существующее задание на основе данных, переданных в запросе"
+      operationId: updateTask
+      parameters:
+        - name: taskid
+          in: path
+          description: Уникальный ID задания
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 3d9dbe07-96b8-44c3-9b35-3869ac18649f
+      requestBody:
+        description: Данные для изменения задания
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdateRequest"
+            examples:
+              task-update-request:
+                description: Шаблон запроса на изменение задания
+                value:
+                  taskTitle: UpdatedTitle
+                  taskDescription: UpdatedTaskDescription
+                  taskStatus: DELAYED
+                  taskDate: 2024-11-14
+                  taskHours: "4"
+                  taskCategory: 5a74eb25-aa8d-49d2-85ed-3b79f9a5b878
+        required: true
+      responses:
+        "200":
+          description: Задание изменено
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Запрос на изменение задания не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "taskID: Invalid task ID format"
+                validation-error:
+                  description: "Ошибка валидации полей названия, описания, статуса и назначенных часов задания"
+                  value:
+                    taskDescription: Description is minimum 2 symbols and maximum
+                      128 symbols.
+                    taskHours: Task hours cannot exceed 24
+                    taskTitle: Title is minimum 2 symbols and maximum 64 symbols.
+                    taskStatus: "Status must be one of: TODO, INPROGRESS, COMPLETE, UNCOMPLETED, DELAYED"
+                    taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+                date-error:
+                  description: Ошибка в формате передаваемой даты
+                  value:
+                    taskDate: "Invalid date format. Expected format: yyyy-MM-dd"
+                null-error:
+                  description: Ошибка пустого запроса
+                  value: |2
+                        Request body cannot be empty
+        "404":
+          description: По переданному параметру ID задание или категория не найдены
+          content:
+            application/json:
+              examples:
+                task-not-found:
+                  description: Задание не найдено
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T17:59:48.345854Z
+                    error: TaskNotFoundException
+                    message: Task with ID 3d9dbe07-96b8-44c3-9b35-3869ac18649c not
+                      found
+                category-not-found:
+                  description: Категория не найдена
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T15:45:43.400476800Z
+                    error: CategoryNotFoundException
+                    message: Category with ID d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a5
+                      not found
+    delete:
+      tags:
+        - Task controller
+      summary: Удаление задания
+      description: Удаляет существующее задание по ID
+      operationId: deleteTask
+      parameters:
+        - name: taskid
+          in: path
+          description: Уникальный ID задания
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 8731ced0-31df-4084-8b8b-dba4a41dec96
+      responses:
+        "204":
+          description: Задание удалено
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Запрашиваемый ID задания не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "taskID: Invalid task ID format"
+        "404":
+          description: По переданному параметру ID задание не найдено
+          content:
+            application/json:
+              examples:
+                task-not-found:
+                  description: Задание не найдено
+                  value:
+                    status: 404
+                    timestamp: 2024-11-17T02:33:58.455282900Z
+                    error: TaskNotFoundException
+                    message: Task with ID 8731ced0-31df-4084-8b8b-dba4a41dec95 not
+                      found
+  /category/{categoryid}:
+    get:
+      tags:
+        - Category controller
+      summary: Получение категории по ID
+      description: Получение информации о категории по уникальному ID
+      operationId: getCategory
+      parameters:
+        - name: categoryid
+          in: path
+          description: Уникальный ID категории
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 67531a89-298d-4038-bd60-9f9357143f9a
+      responses:
+        "200":
+          description: Информация о категории получена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+              examples:
+                Category-by-ID:
+                  description: Ответ с информацией о категории
+                  value:
+                    createdAt: 2024-11-15T16:10:34.91526
+                    updatedAt: 2024-11-15T16:10:34.91526
+                    version: 1
+                    categoryID: 67531a89-298d-4038-bd60-9f9357143f9a
+                    categoryTitle: Default
+                    categoryColour: "#95C8F3"
+                    accountID: 83aeca1f-9d50-41e1-9a2e-529c60437370
+        "400":
+          description: Запрашиваемый ID категории не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "categoryID: Invalid category ID format"
+        "404":
+          description: Категория по запрашиваемому ID не найдена
+          content:
+            application/json:
+              examples:
+                category-not-found:
+                  description: Категория не найдена
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T13:46:11.489875300Z
+                    error: CategoryNotFoundException
+                    message: Category with ID 167e2947-8cc1-4430-b3f6-68fd14565cfd
+                      not found
+    put:
+      tags:
+        - Category controller
+      summary: Изменение категории
+      description: "Изменяет уже существующую категорию на основе данных, переданных в запросе"
+      operationId: updateCategory
+      parameters:
+        - name: categoryid
+          in: path
+          description: Уникальный ID категории
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 67531a89-298d-4038-bd60-9f9357143f9a
+      requestBody:
+        description: Данные для изменения категории
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryUpdateRequest"
+            examples:
+              category-update-request:
+                description: Шаблон запроса на изменение категории
+                value:
+                  categoryTitle: Work
+                  categoryColour: "#bbccdd"
+        required: true
+      responses:
+        "200":
+          description: Категория изменена
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Запрос на изменение категории не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "categoryID: Invalid category ID format"
+                validation-error:
+                  description: Ошибка валидации полей цвета и названия категории
+                  value:
+                    categoryColour: Invalid hex format for colour.
+                    categoryTitle: Title is minimum 2 symbols and maximum 64 symbols.
+                null-error:
+                  description: Ошибка пустого запроса
+                  value: |2
+                        Request body cannot be empty
+        "404":
+          description: По переданному параметру ID категория не найдена
+          content:
+            application/json:
+              examples:
+                category-not-found:
+                  description: Категория не найдена
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T15:45:43.400476800Z
+                    error: CategoryNotFoundException
+                    message: Category with ID d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a5
+                      not found
+    delete:
+      tags:
+        - Category controller
+      summary: Удаление категории
+      description: Удаляет существующую категорию по ID
+      operationId: deleteCategory
+      parameters:
+        - name: categoryid
+          in: path
+          description: Уникальный ID категории
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 67531a89-298d-4038-bd60-9f9357143f9a
+      responses:
+        "204":
+          description: Категория удалена
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Запрашиваемый ID категории не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "categoryID: Invalid category ID format"
+        "404":
+          description: По переданному параметру ID категория не найдена
+          content:
+            application/json:
+              examples:
+                category-not-found:
+                  description: Категория не найдена
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T15:45:43.400476800Z
+                    error: CategoryNotFoundException
+                    message: Category with ID d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a5
+                      not found
+  /task/add:
+    post:
+      tags:
+        - Task controller
+      summary: Создание нового задания
+      description: "Создаёт новое задание на основе данных, переданных в запросе"
+      operationId: addTask
+      requestBody:
+        description: Данные для создания задания
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreationRequest"
+            examples:
+              task-creation-request:
+                description: Шаблон запроса на создание задания
+                value:
+                  taskTitle: TaskTitle2
+                  taskDescription: TaskDescription
+                  taskStatus: INPROGRESS
+                  taskDate: 2024-11-13
+                  taskHours: "2.5"
+                  taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+        required: true
+      responses:
+        "201":
+          description: Задание создано
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Запрос на создание задания не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                validation-error:
+                  description: "Ошибка валидации полей названия, описания, статуса, назначенных часов и категории задания"
+                  value:
+                    taskDescription: Description is minimum 2 symbols and maximum
+                      128 symbols.
+                    taskHours: Task hours cannot exceed 24
+                    taskTitle: Title is minimum 2 symbols and maximum 64 symbols.
+                    taskStatus: "Status must be one of: TODO, INPROGRESS, COMPLETE, UNCOMPLETED, DELAYED"
+                    taskCategory: Invalid UUID format for category.
+                date-error:
+                  description: Ошибка в формате передаваемой даты
+                  value:
+                    taskDate: "Invalid date format. Expected format: yyyy-MM-dd"
+        "404":
+          description: По переданному параметру ID категории не найдено
+          content:
+            application/json:
+              examples:
+                category-not-found:
+                  description: Категория не найдена
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T18:19:24.942152600Z
+                    error: CategoryNotFoundException
+                    message: Category with ID d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a5
+                      not found
+  /category/add:
+    post:
+      tags:
+        - Category controller
+      summary: Создание новой категории
+      description: "Создаёт новую категорию на основе данных, переданных в запросе"
+      operationId: addCategory
+      requestBody:
+        description: Данные для создания категории
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreationRequest"
+            examples:
+              category-creation-request:
+                description: Шаблон запроса на создание категории
+                value:
+                  categoryTitle: Work
+                  categoryColour: "#95c8f3"
+                  accountID: 83aeca1f-9d50-41e1-9a2e-529c60437370
+        required: true
+      responses:
+        "201":
+          description: Категория создана
+          content:
+            '*/*':
+              schema:
+                type: object
+        "400":
+          description: Запрос на создание категории не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                validation-error:
+                  description: "Ошибка валидации полей ID аккаунта, цвета и названия категории"
+                  value:
+                    accountID: Invalid UUID format for account.
+                    categoryColour: Hex should be 7 symbols.
+                    categoryTitle: Title is minimum 2 symbols and maximum 64 symbols.
+  /task/status/{status}:
+    get:
+      tags:
+        - Task controller
+      summary: Получение заданий по статусу
+      description: "Получение информации о списке заданий по статусу, к которой они принадлежат"
+      operationId: getAllTasksByStatus
+      parameters:
+        - name: status
+          in: path
+          description: Статус задания
+          required: true
+          schema:
+            pattern: TODO|INPROGRESS|COMPLETE|UNCOMPLETED|DELAYED
+            type: string
+          example: INPROGRESS
+      responses:
+        "200":
+          description: Информация о списке заданий получена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+              examples:
+                Task-by-status:
+                  description: Ответ с информацией о задании
+                  value:
+                    - createdAt: 2024-11-15T21:05:53.007719
+                      updatedAt: 2024-11-15T21:05:53.007719
+                      version: 1
+                      taskID: 117a5cea-006b-48c2-be91-760d087e0fea
+                      taskTitle: TaskTitle2
+                      taskDescription: TaskDescription
+                      taskStatus: INPROGRESS
+                      taskDate: 2024-11-12T21:00:00.000+00:00
+                      taskHours: 2.5
+                      taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+                    - createdAt: 2024-11-15T21:05:54.271397
+                      updatedAt: 2024-11-15T21:05:54.271397
+                      version: 1
+                      taskID: e7f25100-7ff3-4132-9508-1c7419b83d76
+                      taskTitle: TaskTitle2
+                      taskDescription: TaskDescription
+                      taskStatus: INPROGRESS
+                      taskDate: 2024-11-12T21:00:00.000+00:00
+                      taskHours: 2.5
+                      taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+        "400":
+          description: Запрашиваемый статус не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-status:
+                  description: Невалидный status
+                  value:
+                    - "status: Status must be one of: TODO, INPROGRESS, COMPLETE, UNCOMPLETED, DELAYED"
+        "404":
+          description: По переданному параметру status не найдено заданий
+          content:
+            application/json:
+              examples:
+                task-list-not-found:
+                  description: Задания не найдены
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T19:59:09.593284700Z
+                    error: TaskNotFoundException
+                    message: No tasks found with Status COMPLETE
+  /task/category/{categoryid}:
+    get:
+      tags:
+        - Task controller
+      summary: Получение заданий по ID категорий
+      description: "Получение информации о списке заданий по категории, к которой они принадлежат"
+      operationId: getAllTasksByCategory
+      parameters:
+        - name: categoryid
+          in: path
+          description: Уникальный ID категории
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+      responses:
+        "200":
+          description: Информация о списке заданий получена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+              examples:
+                Task-by-categoryID:
+                  description: Ответ с информацией о задании
+                  value:
+                    - createdAt: 2024-11-15T17:49:34.737675
+                      updatedAt: 2024-11-15T17:49:34.737675
+                      version: 1
+                      taskID: 0deb8393-bf1f-4e3c-905d-4830c60cc687
+                      taskTitle: TaskTitle2
+                      taskDescription: TaskDescription
+                      taskStatus: INPROGRESS
+                      taskDate: 2024-11-12T21:00:00.000+00:00
+                      taskHours: 2.5
+                      taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+                    - createdAt: 2024-11-15T17:50:27.092995
+                      updatedAt: 2024-11-15T17:50:27.092995
+                      version: 1
+                      taskID: 76a21b11-6c4a-4a69-92cc-2cf559508cf1
+                      taskTitle: TaskTitle2
+                      taskDescription: TaskDescription
+                      taskStatus: INPROGRESS
+                      taskDate: 2024-11-12T21:00:00.000+00:00
+                      taskHours: 2.5
+                      taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+        "400":
+          description: Запрашиваемый ID категории не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "categoryID: Invalid category ID format"
+        "404":
+          description: По переданному параметру ID категории не найдена сама категория
+            или не найдено заданий
+          content:
+            application/json:
+              examples:
+                category-not-found:
+                  description: Категория не найдена
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T18:19:24.942152600Z
+                    error: CategoryNotFoundException
+                    message: Category with ID d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a5
+                      not found
+                task-list-not-found:
+                  description: Задания не найдены
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T18:43:32.793564700Z
+                    error: TaskNotFoundException
+                    message: No tasks found with Category ID 81568ddf-c0b1-4c15-b26a-38284c1d7243
+  /task/all:
+    get:
+      tags:
+        - Task controller
+      summary: Получение всех заданий
+      description: Получение списка всех заданий из БД.
+      operationId: getAll
+      parameters:
+        - name: limit
+          in: query
+          description: "Максимальное количество записей, возвращаемых в одном запросе"
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+          example: 10
+        - name: offset
+          in: query
+          description: Смещение для начала выборки данных.
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+          example: 0
+      responses:
+        "200":
+          description: Список заданий получен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+              examples:
+                List of all tasks:
+                  description: Ответ с информацией в виде списка всех заданий
+                  value:
+                    - createdAt: 2024-11-15T21:05:57.412871
+                      updatedAt: 2024-11-15T21:05:57.412871
+                      version: 1
+                      taskID: acd95199-5d37-4db1-bbb2-dead95fb963f
+                      taskTitle: TaskTitle2
+                      taskDescription: TaskDescription
+                      taskStatus: INPROGRESS
+                      taskDate: 2024-11-12T21:00:00.000+00:00
+                      taskHours: 2.5
+                      taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+                    - createdAt: 2024-11-15T21:05:58.188383
+                      updatedAt: 2024-11-15T21:05:58.188383
+                      version: 1
+                      taskID: 02826d59-6cf6-4778-9212-6177739d2c78
+                      taskTitle: TaskTitle2
+                      taskDescription: TaskDescription
+                      taskStatus: INPROGRESS
+                      taskDate: 2024-11-12T21:00:00.000+00:00
+                      taskHours: 2.5
+                      taskCategory: d99ee5a1-ea23-41d5-8ef2-a4dcc6fb49a4
+        "400":
+          description: Запрашиваемый лимит или оффсет для списка заданий не прошли
+            валидацию
+          content:
+            application/json:
+              examples:
+                invalid-limit:
+                  description: Невалидный limit
+                  value:
+                    status: 400
+                    timestamp: 2024-11-16T18:01:26.534803800Z
+                    error: IllegalArgumentException
+                    message: Limit must be greater than 0
+                invalid-offset:
+                  description: Невалидный offset
+                  value:
+                    status: 400
+                    timestamp: 2024-11-16T18:05:34.564370100Z
+                    error: IllegalArgumentException
+                    message: Offset cannot be negative
+  /category/all:
+    get:
+      tags:
+        - Category controller
+      summary: Получение всех категорий
+      description: Получение списка всех категорий из БД.
+      operationId: getAll_1
+      responses:
+        "200":
+          description: Список категорий получен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+              examples:
+                List of all categories:
+                  description: Ответ с информацией в виде списка всех категорий
+                  value:
+                    - createdAt: 2024-11-15T16:10:34.91526
+                      updatedAt: 2024-11-15T16:10:34.91526
+                      version: 1
+                      categoryID: 67531a89-298d-4038-bd60-9f9357143f9a
+                      categoryTitle: Default
+                      categoryColour: "#95C8F3"
+                      accountID: 83aeca1f-9d50-41e1-9a2e-529c60437370
+                    - createdAt: 2024-11-15T16:10:37.427416
+                      updatedAt: 2024-11-15T16:10:37.427416
+                      version: 1
+                      categoryID: 81568ddf-c0b1-4c15-b26a-38284c1d7243
+                      categoryTitle: Work
+                      categoryColour: "#95C8F3"
+                      accountID: 83aeca1f-9d50-41e1-9a2e-529c60437370
+  /category/account/{accountid}:
+    get:
+      tags:
+        - Category controller
+      summary: Получение категорий по ID аккаунта
+      description: Получение информации о списке категорий по создавшему их аккаунту
+      operationId: getAllCategoriesByAccount
+      parameters:
+        - name: accountid
+          in: path
+          description: Уникальный ID аккаунта
+          required: true
+          schema:
+            pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            type: string
+          example: 83aeca1f-9d50-41e1-9a2e-529c60437370
+      responses:
+        "200":
+          description: Информация о списке категорий получена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+              examples:
+                Category-by-accountID:
+                  description: Ответ с информацией о категории
+                  value:
+                    - createdAt: 2024-11-15T16:10:34.91526
+                      updatedAt: 2024-11-15T16:10:34.91526
+                      version: 1
+                      categoryID: 67531a89-298d-4038-bd60-9f9357143f9a
+                      categoryTitle: Default
+                      categoryColour: "#95C8F3"
+                      accountID: 83aeca1f-9d50-41e1-9a2e-529c60437370
+                    - createdAt: 2024-11-15T16:10:37.427416
+                      updatedAt: 2024-11-15T16:10:37.427416
+                      version: 1
+                      categoryID: 81568ddf-c0b1-4c15-b26a-38284c1d7243
+                      categoryTitle: Work
+                      categoryColour: "#95C8F3"
+                      accountID: 83aeca1f-9d50-41e1-9a2e-529c60437370
+        "400":
+          description: Запрашиваемый ID аккаунта не прошёл валидацию
+          content:
+            application/json:
+              examples:
+                invalid-id:
+                  description: Невалидный ID
+                  value:
+                    - "accountID: Invalid category ID format"
+        "404":
+          description: По переданному параметру ID аккаунт не найден
+          content:
+            application/json:
+              examples:
+                account-not-found:
+                  description: Аккаунт не найден
+                  value:
+                    status: 404
+                    timestamp: 2024-11-16T14:08:02.770518Z
+                    error: CategoryNotFoundException
+                    message: No categories found with Account ID 83aeca1f-9d50-41e1-9a2e-529c60437371
+components:
+  schemas:
+    TaskUpdateRequest:
+      type: object
+      properties:
+        taskTitle:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Название задания
+          example: Создание валидации
+        taskDescription:
+          maxLength: 128
+          minLength: 2
+          type: string
+          description: Описание задания
+          example: Сделать валидирование за утро
+        taskStatus:
+          pattern: TODO|INPROGRESS|COMPLETE|UNCOMPLETED|DELAYED
+          type: string
+          description: Статус задания
+          example: TODO
+        taskDate:
+          pattern: yyyy-MM-dd
+          type: string
+          description: Дата выполнения задачи в формате yyyy-MM-dd
+          format: date-time
+        taskHours:
+          maximum: 24
+          minimum: 0.5
+          exclusiveMinimum: false
+          type: number
+          description: "Количество часов, отведенных на выполнение задачи"
+          format: float
+        taskCategory:
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+          type: string
+          description: "Уникальный идентификатор категории, к которой относится задача"
+          example: 2cb7304c-0116-464c-94e5-e4ea8b799460
+      description: Схема запроса на изменение задания
+    CategoryUpdateRequest:
+      type: object
+      properties:
+        categoryTitle:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Название категории
+          example: Work
+        categoryColour:
+          maxLength: 7
+          minLength: 7
+          pattern: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+          type: string
+          description: Hex-код цвета категории
+          example: "#95C8F3"
+      description: Схема запроса на изменение категории
+    TaskCreationRequest:
+      required:
+        - taskCategory
+        - taskDate
+        - taskDescription
+        - taskHours
+        - taskStatus
+        - taskTitle
+      type: object
+      properties:
+        taskTitle:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Название задания
+          example: Создание валидации
+        taskDescription:
+          maxLength: 128
+          minLength: 2
+          type: string
+          description: Описание задания
+          example: Сделать валидирование за утро
+        taskStatus:
+          pattern: TODO|INPROGRESS|COMPLETE|UNCOMPLETED|DELAYED
+          type: string
+          description: Статус задания
+          example: TODO
+        taskDate:
+          pattern: yyyy-MM-dd
+          type: string
+          description: Дата выполнения задачи в формате yyyy-MM-dd
+          format: date-time
+        taskHours:
+          maximum: 24
+          minimum: 0.5
+          exclusiveMinimum: false
+          type: number
+          description: "Количество часов, отведенных на выполнение задачи"
+          format: float
+        taskCategory:
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+          type: string
+          description: "Уникальный идентификатор категории, к которой относится задача"
+          example: 2cb7304c-0116-464c-94e5-e4ea8b799460
+      description: Схема запроса на создание задания
+    CategoryCreationRequest:
+      required:
+        - accountID
+        - categoryTitle
+      type: object
+      properties:
+        categoryTitle:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Название категории
+          example: Work
+        categoryColour:
+          maxLength: 7
+          minLength: 7
+          pattern: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+          type: string
+          description: Hex-код цвета категории
+          example: "#95C8F3"
+        accountID:
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+          type: string
+          description: "ID аккаунта, создающего категорию"
+          example: 83aeca1f-9d50-41e1-9a2e-529c60437370
+      description: Схема запроса на создание категории
+    Task:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: Дата и время создания записи
+          format: date-time
+        updatedAt:
+          type: string
+          description: Дата и время последнего обновления записи
+          format: date-time
+        version:
+          type: integer
+          description: Версия записи для обеспечения оптимистической блокировки
+          format: int64
+          example: 1
+        taskID:
+          type: string
+          description: Уникальный идентификатор задачи
+          format: uuid
+        taskTitle:
+          type: string
+          description: Название задачи
+          example: Сделать валидацию DTO
+        taskDescription:
+          type: string
+          description: Описание задачи
+          example: Необходимо валидировать реквесты за утро
+        taskStatus:
+          type: string
+          description: Статус задачи
+          example: TODO
+          enum:
+            - TODO
+            - INPROGRESS
+            - COMPLETE
+            - UNCOMPLETED
+            - DELAYED
+        taskDate:
+          type: string
+          description: Дата выполнения задачи в формате yyyy-MM-dd
+          format: date-time
+        taskHours:
+          type: number
+          description: "Количество часов, отведенных на выполнение задачи"
+          format: float
+          example: 3.5
+        taskCategory:
+          type: string
+          description: "Уникальный идентификатор категории, к которой относится задача"
+          format: uuid
+          example: 2cb7304c-0116-464c-94e5-e4ea8b799460
+      description: "Модель задачи, связанной с определенной категорией."
+    Category:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: Дата и время создания записи
+          format: date-time
+        updatedAt:
+          type: string
+          description: Дата и время последнего обновления записи
+          format: date-time
+        version:
+          type: integer
+          description: Версия записи для обеспечения оптимистической блокировки
+          format: int64
+          example: 1
+        categoryID:
+          type: string
+          description: Уникальный идентификатор категории
+          format: uuid
+          example: 2cb7304c-0116-464c-94e5-e4ea8b799460
+        categoryTitle:
+          type: string
+          description: Название категории
+          example: Work
+        categoryColour:
+          type: string
+          description: Цвет категории в формате HEX
+          example: "#CBDFBC"
+        accountID:
+          type: string
+          description: "Уникальный идентификатор пользователя, которому принадлежит категория"
+          format: uuid
+          example: e1a2b3c4-d5e6-f7a8-9b0c-d1e2f3a4b5c6
+      description: "Модель категории, связанной с задачами пользователя."
+
