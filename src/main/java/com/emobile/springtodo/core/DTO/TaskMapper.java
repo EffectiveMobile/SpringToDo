@@ -1,6 +1,5 @@
 package com.emobile.springtodo.core.DTO;
 
-import com.emobile.springtodo.core.entity.Category;
 import com.emobile.springtodo.core.entity.Status;
 import com.emobile.springtodo.core.entity.Task;
 import org.springframework.jdbc.core.RowMapper;

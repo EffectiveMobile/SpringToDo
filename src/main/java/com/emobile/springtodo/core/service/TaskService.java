@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ConcurrentModificationException;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service

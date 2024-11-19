@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public interface CategoryRepo {
 
-    public List<Category> findAll();
-    public Optional<Category> findById(UUID id);
-    public List<Category> findByAccountId(UUID accountId);
-    public int save(Category category);
-    public int update(Category category, Long currentVersion);
-    public int delete(UUID categoryId);
+    List<Category> findAll();
+    Optional<Category> findById(UUID id);
+    List<Category> findByAccountId(UUID accountId);
+    int save(Category category);
+    int update(Category category, Long currentVersion);
+    int delete(UUID categoryId);
 
 }

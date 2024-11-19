@@ -1,8 +1,6 @@
 package com.emobile.springtodo.core.DAO;
 
-import com.emobile.springtodo.core.entity.Category;
 import com.emobile.springtodo.core.entity.Task;
-import com.emobile.springtodo.core.exception.customexceptions.CategoryNotFoundException;
 import com.emobile.springtodo.core.exception.customexceptions.CustomDataAccessException;
 import com.emobile.springtodo.core.exception.customexceptions.TaskNotFoundException;
 import com.emobile.springtodo.core.repository.TaskRepoImpl;
