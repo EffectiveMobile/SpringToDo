@@ -33,9 +33,6 @@ public class CategoryService {
     private static final String CACHE_ONE_ENTRY = "category";
     private static final String CACHE_LIST_ENTRIES = "category_collection";
 
-    private final RedisCacheManager cacheManager;
-
-
     public List<Category> findAll() {
         log.debug("Getting all categories");
         return categoryDAO.getAll();

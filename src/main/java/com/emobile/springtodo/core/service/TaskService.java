@@ -37,8 +37,6 @@ public class TaskService {
     private static final String CACHE_ONE_ENTRY = "task";
     private static final String CACHE_LIST_ENTRIES = "task_collection";
 
-    private final RedisCacheManager cacheManager;
-
     public List<Task> getAllTasks(int limit, int offset) {
         log.debug("Getting tasks with limit {} and offset {}", limit, offset);
 
