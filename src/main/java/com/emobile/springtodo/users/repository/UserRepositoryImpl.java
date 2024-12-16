@@ -110,8 +110,8 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         final String sqlQuery = """
-                UPDATE users  SET EMAIL = ?, PASSWORD = ?
-                WHERE users.id  ?
+                UPDATE public.users  SET EMAIL = ?, PASSWORD = ?
+                WHERE public.users.id = ?
                 """;
 
         jdbcTemplate.update(sqlQuery, newUserDto.email(), newUserDto.email(), userId);
@@ -124,7 +124,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User deleteUserAccount(Long userId) {
 
         final String sqlQuery = """
-                DELETE FROM users WHERE users.id ?
+                DELETE FROM users WHERE users.id = ?
                 """;
         User userToDelete = this.getUserById(userId);
 
