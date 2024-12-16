@@ -3,6 +3,7 @@ package com.emobile.springtodo.users.service;
 import com.emobile.springtodo.users.dto.in.NewUserRequestDto;
 import com.emobile.springtodo.users.dto.out.UserResponseDto;
 import com.emobile.springtodo.users.repository.UserRepository;
+import com.emobile.springtodo.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,9 +18,10 @@ public class UserServiceImpl implements UserService {
     public List<UserResponseDto> gettListOfUsersDto(Integer from, Integer size) {
 
 
-        return userRepository.getAllUsersList(from, size).stream()
-                .map(UserResponseDto::UserMapper)
-                .toList();
+        return userRepository.getAllUsersList(from, size)
+                                                        .stream()
+                                                        .map(UserMapper::toUserResponseDto)
+                                                        .toList();
     }
 
     @Override
