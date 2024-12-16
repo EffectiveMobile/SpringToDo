@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDateTime;
+import com.emobile.springtodo.users.model.entity.Priority;
 
 @Getter
 @Setter
@@ -27,6 +28,8 @@ public class Task {
     private String description;
 
     private String header;
+
+    private Priority priority;
 
     private Status status;
 

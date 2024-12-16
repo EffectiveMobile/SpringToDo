@@ -1,6 +1,5 @@
 package com.emobile.springtodo.users.model;
 
-import com.emobile.springtodo.users.model.entity.Priority;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,6 +22,4 @@ public class User {
     private String email;
 
     private String password;
-
-    private Priority priority;
 }
