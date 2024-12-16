@@ -1,8 +1,12 @@
+server:
+  port: 8080
+
 spring:
-  data:
-    redis:
-      host: localhost
-      port: 6379
+
+  #  data:
+#    redis:
+#      host: localhost
+#      port: 6379
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -16,6 +20,9 @@ spring:
     baseline-on-migrate: true
     default-schema: public
     out-of-order: false
+    url: jdbc:postgresql://localhost:5432/tasks_db
+    user: root
+    password: root
 
 logging:
   file:
