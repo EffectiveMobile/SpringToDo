@@ -44,9 +44,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     final String sqlQuery = """
                             SELECT *
                             FROM public.tasks
+                            OFFSET ?
+                            LIMIT ?
                             """;
 
-        return jdbcTemplate.query(sqlQuery, this::makeTask);
+        return jdbcTemplate.query(sqlQuery, this::makeTask, from, size);
     }
 
     @Override
