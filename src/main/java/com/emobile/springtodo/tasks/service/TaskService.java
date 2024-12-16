@@ -13,7 +13,7 @@ public interface TaskService {
 
     TaskResponseDto createTaskByAuthorId(NewTaskRequestDto newTaskDto);
 
-    TaskResponseDto updateTaskByAuthorId(Long authorId, UpdateTaskDto updateTaskDto);
+    TaskResponseDto updateTaskByAuthorId(Long authorId, Long taskId, UpdateTaskDto updateTaskDto);
 
     TaskResponseDto deleteTaskByAuthorId(Long authorId, Long taskId);
 }

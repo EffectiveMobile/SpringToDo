@@ -18,8 +18,5 @@ public record UpdateTaskDto(@NotBlank
                             Status status,
 
                             @Positive
-                            Long assignee,
-
-                            @Positive
-                            Long author) {
+                            Long assignee) {
 }

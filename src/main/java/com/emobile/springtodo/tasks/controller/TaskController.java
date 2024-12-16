@@ -56,12 +56,13 @@ public class TaskController {
         return taskService.createTaskByAuthorId(newTaskDto);
     }
 
-    @PutMapping("/{authorId}")
+    @PutMapping("/{authorId}/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public TaskResponseDto updateTaskByAuthorId(@Positive @PathVariable(name = "authorId") Long authorId,
+                                                @Positive @PathVariable(name = "taskId") Long taskId,
                                                 @Validated(Update.class)@RequestBody UpdateTaskDto updateTaskDto) {
 
-        return taskService.updateTaskByAuthorId(authorId, updateTaskDto);
+        return taskService.updateTaskByAuthorId(authorId, taskId, updateTaskDto);
     }
 
     @DeleteMapping("/{authorId}/{taskId}")

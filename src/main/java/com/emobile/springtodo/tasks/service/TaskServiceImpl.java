@@ -57,10 +57,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponseDto updateTaskByAuthorId(Long authorId, UpdateTaskDto updateTaskDto) {
+    public TaskResponseDto updateTaskByAuthorId(Long authorId, Long taskId, UpdateTaskDto updateTaskDto) {
 
 
-        return TaskMapper.toTaskResponseDto(taskRepository.updateTaskByAuthorId(authorId, updateTaskDto));
+        return TaskMapper.toTaskResponseDto(taskRepository.updateTaskByAuthorId(authorId, taskId, updateTaskDto));
     }
 
     @Override

@@ -129,7 +129,7 @@ public class UserRepositoryImpl implements UserRepository {
         final String sqlQuery = """
                 DELETE FROM users WHERE users.id = ?
                 """;
-        User userToDelete = this.getUserById(userId);
+        final User userToDelete = this.getUserById(userId);
 
         jdbcTemplate.update(sqlQuery, userId);
 

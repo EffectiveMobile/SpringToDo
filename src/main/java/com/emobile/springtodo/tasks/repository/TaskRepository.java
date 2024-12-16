@@ -12,7 +12,7 @@ public interface TaskRepository {
 
     Task createTaskByAuthorId(Task task);
 
-    Task updateTaskByAuthorId(Long authorId, UpdateTaskDto updateTaskDto);
+    Task updateTaskByAuthorId(Long authorId, Long taskId, UpdateTaskDto updateTaskDto);
 
     Task deleteTaskByAuthorId(Long authorId, Long taskId);
 }
