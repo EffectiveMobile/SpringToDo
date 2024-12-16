@@ -1,5 +1,6 @@
 package com.emobile.springtodo.users.controller;
 
+import com.emobile.springtodo.users.dto.in.UpdateUserAccount;
 import com.emobile.springtodo.users.dto.in.NewUserRequestDto;
 import com.emobile.springtodo.users.dto.out.UserResponseDto;
 import com.emobile.springtodo.users.service.UserService;
@@ -57,9 +58,9 @@ public class UserController {
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto updateUserAccount(@Positive @PathVariable(name = "userId") Long userId,
-                                             @Validated(Update.class) @RequestBody NewUserRequestDto newUserDto) {
+                                             @Validated(Update.class) @RequestBody UpdateUserAccount updateUserDto) {
 
-        return userService.updateUserAccount(userId, newUserDto);
+        return userService.updateUserAccount(userId, updateUserDto);
     }
 
     @DeleteMapping("/{userId}")

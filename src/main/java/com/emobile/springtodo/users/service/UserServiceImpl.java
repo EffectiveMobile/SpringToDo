@@ -1,5 +1,6 @@
 package com.emobile.springtodo.users.service;
 
+import com.emobile.springtodo.users.dto.in.UpdateUserAccount;
 import com.emobile.springtodo.users.dto.in.NewUserRequestDto;
 import com.emobile.springtodo.users.dto.out.UserResponseDto;
 import com.emobile.springtodo.users.repository.UserRepository;
@@ -36,9 +37,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto updateUserAccount(Long userId, NewUserRequestDto newUserDto) {
+    public UserResponseDto updateUserAccount(Long userId, UpdateUserAccount updateUserDto) {
 
-        return UserMapper.toUserResponseDto(userRepository.updateUserAccount(userId, newUserDto));
+        return UserMapper.toUserResponseDto(userRepository.updateUserAccount(userId, updateUserDto));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.emobile.springtodo.users.repository;
 
+import com.emobile.springtodo.users.dto.in.UpdateUserAccount;
 import com.emobile.springtodo.users.dto.in.NewUserRequestDto;
 import com.emobile.springtodo.users.model.User;
 import com.emobile.springtodo.utils.exception.exceptions.ObjectNotFoundException;
@@ -24,6 +25,8 @@ public class UserRepositoryImpl implements UserRepository {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String MESSAGE = "User with email: {} was sent";
+
+    private static final String MESSAGE_ID = "User with userid: {} was sent";
 
     @Override
     public List<User> getAllUsersList(Integer from, Integer size) {
@@ -94,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateUserAccount(Long userId, NewUserRequestDto newUserDto) {
+    public User updateUserAccount(Long userId, UpdateUserAccount updateUserDto) {
 
         final String checkQuery = """
                 SELECT *
@@ -105,18 +108,18 @@ public class UserRepositoryImpl implements UserRepository {
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(checkQuery, userId);
 
         if (!userRows.next()) {
-            log.warn(MESSAGE, newUserDto.email());
+            log.warn(MESSAGE_ID, userId);
             throw new ObjectNotFoundException("User not present in Db!");
         }
 
         final String sqlQuery = """
-                UPDATE public.users  SET EMAIL = ?, PASSWORD = ?
+                UPDATE public.users  SET PASSWORD = ?
                 WHERE public.users.id = ?
                 """;
 
-        jdbcTemplate.update(sqlQuery, newUserDto.email(), newUserDto.email(), userId);
+        jdbcTemplate.update(sqlQuery, updateUserDto.password(), userId);
 
-        log.info(MESSAGE, newUserDto.email());
+        log.info(MESSAGE_ID, userId);
         return getUserById(userId);
     }
 

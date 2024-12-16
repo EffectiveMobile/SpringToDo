@@ -1,6 +1,13 @@
 package com.emobile.springtodo.users.dto.in;
 
-public record NewUserRequestDto(String email,
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record NewUserRequestDto(@Email
+                                @NotBlank
+                                String email,
+
+                                @NotBlank
                                 String password
 ) {
 
