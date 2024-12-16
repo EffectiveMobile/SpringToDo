@@ -6,11 +6,12 @@ import com.emobile.springtodo.tasks.model.entity.Priority;
 import com.emobile.springtodo.tasks.model.entity.Status;
 import com.emobile.springtodo.users.model.User;
 import com.emobile.springtodo.users.repository.UserRepository;
+import com.emobile.springtodo.utils.exception.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -39,8 +40,28 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task getTaskByAuthorIdAndTaskId(Long authorId, Long taskId) {
 
+        final String checkQuery = """
+                                  SELECT *
+                                  FROM public.tasks
+                                  WHERE tasks.author_id = ?
+                                  AND tasks.id = ?
+                                  """;
 
-        return null;
+        SqlRowSet taskRows = jdbcTemplate.queryForRowSet(checkQuery, authorId, taskId);
+
+        if (!taskRows.next()) {
+            log.warn("Tasks with id: {} not present.", taskId);
+            throw new ObjectNotFoundException("Фильм не найден");
+        }
+
+        final String sqlQuery = """
+                                SELECT *
+                                FROM public.tasks
+                                WHERE tasks.author_id = ?
+                                AND tasks.id = ?
+                                """;
+
+        return jdbcTemplate.queryForObject(sqlQuery, this::makeTask, authorId, taskId);
     }
 
     @Override
