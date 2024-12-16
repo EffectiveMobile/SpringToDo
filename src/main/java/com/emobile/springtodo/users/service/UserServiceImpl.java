@@ -15,8 +15,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UserResponseDto> gettListOfUsersDto(Integer from, Integer size) {
-
+    public List<UserResponseDto> getListOfUsersDto(Integer from, Integer size) {
 
         return userRepository.getAllUsersList(from, size)
                                                         .stream()
@@ -25,10 +24,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserDtoById(Long userId) {
+    public UserResponseDto getUserById(Long userId) {
 
-
-        return null;
+        return UserMapper.toUserResponseDto(userRepository.getUserById(userId));
     }
 
     @Override

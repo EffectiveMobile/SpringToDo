@@ -38,14 +38,14 @@ public class UserController {
     public List<UserResponseDto> getListOfUsersDto(@PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
                                                    @Positive @RequestParam(defaultValue = "10") Integer size) {
 
-        return userService.gettListOfUsersDto(from, size);
+        return userService.getListOfUsersDto(from, size);
     }
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getUserDtoById(@Positive @PathVariable(name = "userId") Long userId) {
 
-        return userService.getUserDtoById(userId);
+        return userService.getUserById(userId);
     }
 
     @PostMapping()

@@ -7,7 +7,7 @@ public interface UserRepository {
 
     List<User> getAllUsersList(Integer from, Integer size);
 
-
+    User getUserById(Long userId);
 
 
 }
