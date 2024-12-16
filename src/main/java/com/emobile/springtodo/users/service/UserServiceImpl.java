@@ -32,21 +32,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createUserAccount(NewUserRequestDto newUserDto) {
 
-
-        return null;
+        return UserMapper.toUserResponseDto(userRepository.createUserAccount(newUserDto));
     }
 
     @Override
     public UserResponseDto updateUserAccount(Long userId, NewUserRequestDto newUserDto) {
 
-
-        return null;
+        return UserMapper.toUserResponseDto(userRepository.updateUserAccount(userId, newUserDto));
     }
 
     @Override
     public UserResponseDto deleteUserAccount(Long userId) {
 
-
-        return null;
+        return UserMapper.toUserResponseDto(userRepository.deleteUserAccount(userId));
     }
 }
