@@ -1,4 +1,4 @@
-package com.emobile.springtodo.users.model.entity;
+package com.emobile.springtodo.tasks.model.entity;
 
 public enum Status {
 
