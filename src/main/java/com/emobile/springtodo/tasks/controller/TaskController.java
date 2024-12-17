@@ -6,6 +6,8 @@ import com.emobile.springtodo.tasks.dto.out.TaskResponseDto;
 import com.emobile.springtodo.tasks.service.TaskService;
 import com.emobile.springtodo.utils.Create;
 import com.emobile.springtodo.utils.Update;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+@Tag(name = "TaskController", description = "Контроллер предоставляющий ручки/handlers для взаимодействие с сущностью Task")
 @Slf4j
 @Validated
 @RestController
@@ -33,6 +36,10 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @Operation(
+            summary = "Получение всех записей задач (Task))",
+            description = "Позволяет получить все записи из БД"
+    )
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<TaskResponseDto> getListOfAllTasks(@PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
@@ -41,6 +48,10 @@ public class TaskController {
         return taskService.getListOfAllTasks(from, size);
     }
 
+    @Operation(
+            summary = "Получение всех записей задач (Task) по id автора",
+            description = "Позволяет получить все записи по id автора из БД"
+    )
     @GetMapping("{authorId}/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public TaskResponseDto getTaskByAuthorIdAndTaskId(@Positive @PathVariable(name = "authorId") Long authorId,
@@ -65,6 +76,10 @@ public class TaskController {
         return taskService.updateTaskByAuthorId(authorId, taskId, updateTaskDto);
     }
 
+    @Operation(
+            summary = "Создание новой задачи (Task)",
+            description = "Позволяет создать новую (Task)"
+    )
     @DeleteMapping("/{authorId}/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public TaskResponseDto deleteTaskByAuthorId(@Positive @PathVariable(name = "authorId") Long authorId,
