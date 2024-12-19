@@ -44,15 +44,15 @@ class UserControllerTest {
 
     }
 
-//    @Test
-//    void getUserDtoById() throws Exception {
-//
-//        mockMvc.perform(
-//                        get("/users/1")
-//                )
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.email").value("test@test.com"));
-//    }
+    @Test
+    void getUserDtoById() throws Exception {
+
+        mockMvc.perform(
+                        get("/users/1")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("test@test.com"));
+    }
 
     @Test
     void createUserAccount() {
