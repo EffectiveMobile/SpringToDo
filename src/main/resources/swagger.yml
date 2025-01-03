@@ -1,0 +1,8 @@
+application-data:
+  description: "Это микросервис для менеджмента задач. Он реализует необходимый API для взаимодействия, а также разграничивает права между админами и пользователями с помощью работы с JWT."
+  version: "1.0"
+  name: "Task API"
+  contact:
+    name: "Киселев Антон"
+    vk: "https://vk.com/smertex"
+    email: "smertexx@gmail.com"
