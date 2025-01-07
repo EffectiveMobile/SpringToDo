@@ -1,8 +1,8 @@
 package emobile.by.smertex.springtodo.dto.update;
 
 
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Priority;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Status;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Priority;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,8 +1,8 @@
-package emobile.by.smertex.springtodo.database.entity.realisation;
+package emobile.by.smertex.springtodo.database.entity.sql.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.interfaces.BaseEntity;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Priority;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Status;
+import emobile.by.smertex.springtodo.database.entity.sql.interfaces.BaseEntity;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Priority;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Status;
 import lombok.*;
 
 import java.util.UUID;

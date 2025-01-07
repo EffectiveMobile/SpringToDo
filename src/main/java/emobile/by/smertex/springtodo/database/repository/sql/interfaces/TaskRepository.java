@@ -1,6 +1,6 @@
-package emobile.by.smertex.springtodo.database.repository.interfaces;
+package emobile.by.smertex.springtodo.database.repository.sql.interfaces;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.Task;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;

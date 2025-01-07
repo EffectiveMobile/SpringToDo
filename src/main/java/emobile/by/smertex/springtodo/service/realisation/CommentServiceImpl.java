@@ -1,8 +1,8 @@
 package emobile.by.smertex.springtodo.service.realisation;
 
 import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
-import emobile.by.smertex.springtodo.database.entity.realisation.Comment;
-import emobile.by.smertex.springtodo.database.repository.interfaces.CommentRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Comment;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.CommentRepository;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;

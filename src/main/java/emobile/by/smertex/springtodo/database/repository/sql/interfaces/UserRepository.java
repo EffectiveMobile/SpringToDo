@@ -1,6 +1,6 @@
-package emobile.by.smertex.springtodo.database.repository.interfaces;
+package emobile.by.smertex.springtodo.database.repository.sql.interfaces;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.User;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.User;
 
 import java.util.Optional;
 import java.util.UUID;

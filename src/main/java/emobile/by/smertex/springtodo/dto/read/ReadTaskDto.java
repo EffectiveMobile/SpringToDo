@@ -1,7 +1,7 @@
 package emobile.by.smertex.springtodo.dto.read;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Priority;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Status;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Priority;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

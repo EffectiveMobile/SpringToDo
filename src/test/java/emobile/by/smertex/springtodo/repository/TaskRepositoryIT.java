@@ -1,11 +1,11 @@
 package emobile.by.smertex.springtodo.repository;
 
 import emobile.by.smertex.springtodo.annotation.IT;
-import emobile.by.smertex.springtodo.database.entity.realisation.Task;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Priority;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Status;
-import emobile.by.smertex.springtodo.database.repository.interfaces.TaskRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Priority;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Status;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.filter.UserFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;

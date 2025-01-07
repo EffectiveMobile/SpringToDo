@@ -1,11 +1,10 @@
 package emobile.by.smertex.springtodo.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import emobile.by.smertex.springtodo.database.entity.nosql.UserJwt;
 import emobile.by.smertex.springtodo.dto.exception.ApplicationResponse;
-import emobile.by.smertex.springtodo.util.JwtTokenUtils;
+import emobile.by.smertex.springtodo.service.interfaces.UserJwtService;
 import emobile.by.smertex.springtodo.util.ResponseMessage;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.SignatureException;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,32 +32,28 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final UserJwtService userJwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @Nullable HttpServletResponse response, @Nullable FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        String username = null;
+        UserJwt userJwt = null;
         String jwt = null;
 
         if(authHeader != null && authHeader.startsWith("Bearer ")){
             jwt = authHeader.substring(7);
-            try{
-                username = jwtTokenUtils.getUsername(jwt);
-            } catch (ExpiredJwtException e){
-                response.getWriter().write(objectMapper.writeValueAsString(responseException(response, ResponseMessage.EXPIRED_JWT_EXCEPTION)));
-            } catch (SignatureException e){
-                response.getWriter().write(objectMapper.writeValueAsString(responseException(response, ResponseMessage.SIGNATURE_EXCEPTION)));
-            }
+            userJwt = userJwtService.findByJwt(jwt);
+
+            if(userJwt == null)
+                response.getWriter().write(objectMapper.writeValueAsString(responseException(response, ResponseMessage.INVALID_JWT)));
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if(jwt != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                    username,
+                    userJwt.getEmail(),
                     null,
-                    jwtTokenUtils.getRoles(jwt).stream()
-                            .map(SimpleGrantedAuthority::new)
-                            .toList());
+                    userJwt.getRoles()
+            );
             SecurityContextHolder.getContext().setAuthentication(token);
         }
         filterChain.doFilter(request, response);

@@ -1,6 +1,6 @@
 package emobile.by.smertex.springtodo.mapper.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.Task;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
 import emobile.by.smertex.springtodo.mapper.interfaces.Mapper;
 import lombok.RequiredArgsConstructor;

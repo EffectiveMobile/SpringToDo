@@ -1,13 +1,13 @@
-package emobile.by.smertex.springtodo.database.repository.realisation;
+package emobile.by.smertex.springtodo.database.repository.sql.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.Comment;
-import emobile.by.smertex.springtodo.database.entity.realisation.Metainfo;
-import emobile.by.smertex.springtodo.database.entity.realisation.Task;
-import emobile.by.smertex.springtodo.database.entity.realisation.User;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Priority;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Status;
-import emobile.by.smertex.springtodo.database.repository.interfaces.CommentRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Comment;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Metainfo;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.User;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Priority;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Status;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.CommentRepository;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;

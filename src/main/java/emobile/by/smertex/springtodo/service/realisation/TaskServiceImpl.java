@@ -2,8 +2,8 @@ package emobile.by.smertex.springtodo.service.realisation;
 
 import emobile.by.smertex.springtodo.service.exception.SaveMetainfoException;
 import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
-import emobile.by.smertex.springtodo.database.entity.realisation.Task;
-import emobile.by.smertex.springtodo.database.repository.interfaces.TaskRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;

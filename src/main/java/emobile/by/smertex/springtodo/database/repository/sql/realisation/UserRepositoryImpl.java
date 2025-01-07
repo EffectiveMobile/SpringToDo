@@ -1,8 +1,8 @@
-package emobile.by.smertex.springtodo.database.repository.realisation;
+package emobile.by.smertex.springtodo.database.repository.sql.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.User;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
-import emobile.by.smertex.springtodo.database.repository.interfaces.UserRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.User;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

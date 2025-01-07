@@ -1,10 +1,10 @@
 package emobile.by.smertex.springtodo.repository;
 
 import emobile.by.smertex.springtodo.annotation.IT;
-import emobile.by.smertex.springtodo.database.entity.realisation.Comment;
-import emobile.by.smertex.springtodo.database.entity.realisation.Task;
-import emobile.by.smertex.springtodo.database.repository.interfaces.CommentRepository;
-import emobile.by.smertex.springtodo.database.repository.interfaces.TaskRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Comment;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.CommentRepository;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.filter.UserFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.List;
 import java.util.Optional;

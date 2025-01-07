@@ -2,7 +2,7 @@ spring:
   application:
     name: SpringToDo
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://db:5434/spring-todo_db
     username: Smertex
     password: Xz1g3n41g4j2F4vbsyEbgbmSER4IEHsdf3h
     driver-class-name: org.postgresql.Driver
@@ -15,4 +15,4 @@ spring:
   liquibase:
     enabled: true
   config:
-    import: classpath:jwt.yml,classpath:server.yml,classpath:swagger.yml
+    import: classpath:jwt.yml,classpath:server.yml,classpath:swagger.yml, classpath:redis.yml

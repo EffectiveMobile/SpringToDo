@@ -1,4 +1,4 @@
-package emobile.by.smertex.springtodo.database.entity.interfaces;
+package emobile.by.smertex.springtodo.database.entity.sql.interfaces;
 
 import java.io.Serializable;
 import java.util.UUID;

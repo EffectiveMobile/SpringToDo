@@ -1,7 +1,7 @@
 package emobile.by.smertex.springtodo.service;
 
 import emobile.by.smertex.springtodo.annotation.IT;
-import emobile.by.smertex.springtodo.database.entity.realisation.User;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.User;
 import emobile.by.smertex.springtodo.service.realisation.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;

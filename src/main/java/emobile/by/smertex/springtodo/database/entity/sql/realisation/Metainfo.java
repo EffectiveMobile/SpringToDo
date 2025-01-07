@@ -1,6 +1,6 @@
-package emobile.by.smertex.springtodo.database.entity.realisation;
+package emobile.by.smertex.springtodo.database.entity.sql.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.interfaces.BaseEntity;
+import emobile.by.smertex.springtodo.database.entity.sql.interfaces.BaseEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;

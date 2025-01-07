@@ -1,7 +1,7 @@
 package emobile.by.smertex.springtodo.service;
 
 import emobile.by.smertex.springtodo.annotation.IT;
-import emobile.by.smertex.springtodo.database.entity.realisation.Metainfo;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Metainfo;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.service.interfaces.MetainfoService;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;

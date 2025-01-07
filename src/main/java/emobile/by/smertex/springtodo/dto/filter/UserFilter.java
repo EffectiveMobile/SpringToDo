@@ -1,6 +1,6 @@
 package emobile.by.smertex.springtodo.dto.filter;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;

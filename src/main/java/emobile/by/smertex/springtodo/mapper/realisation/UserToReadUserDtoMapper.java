@@ -1,6 +1,6 @@
 package emobile.by.smertex.springtodo.mapper.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.User;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.User;
 import emobile.by.smertex.springtodo.dto.read.ReadUserDto;
 import emobile.by.smertex.springtodo.mapper.interfaces.Mapper;
 import org.springframework.stereotype.Component;

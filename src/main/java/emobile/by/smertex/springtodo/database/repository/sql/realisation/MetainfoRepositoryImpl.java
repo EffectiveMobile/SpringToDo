@@ -1,7 +1,7 @@
-package emobile.by.smertex.springtodo.database.repository.realisation;
+package emobile.by.smertex.springtodo.database.repository.sql.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.Metainfo;
-import emobile.by.smertex.springtodo.database.repository.interfaces.MetainfoRepository;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.Metainfo;
+import emobile.by.smertex.springtodo.database.repository.sql.interfaces.MetainfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;

@@ -1,6 +1,6 @@
 package emobile.by.smertex.springtodo.config.security;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
 import emobile.by.smertex.springtodo.service.realisation.LoadUserServiceImpl;
 import emobile.by.smertex.springtodo.util.ApiPath;
 import lombok.RequiredArgsConstructor;

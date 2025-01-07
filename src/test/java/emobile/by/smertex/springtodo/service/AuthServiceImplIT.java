@@ -1,14 +1,13 @@
 package emobile.by.smertex.springtodo.service;
 
 import emobile.by.smertex.springtodo.annotation.IT;
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
 import emobile.by.smertex.springtodo.dto.security.JwtRequest;
 import emobile.by.smertex.springtodo.service.exception.AuthException;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;
 import emobile.by.smertex.springtodo.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 

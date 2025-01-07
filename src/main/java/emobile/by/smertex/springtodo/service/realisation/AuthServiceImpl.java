@@ -1,11 +1,13 @@
 package emobile.by.smertex.springtodo.service.realisation;
 
-import emobile.by.smertex.springtodo.database.entity.realisation.enums.Role;
+import emobile.by.smertex.springtodo.database.entity.nosql.UserJwt;
+import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
 import emobile.by.smertex.springtodo.dto.security.JwtRequest;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.service.exception.AuthException;
 import emobile.by.smertex.springtodo.service.interfaces.AuthService;
 import emobile.by.smertex.springtodo.service.interfaces.LoadUserService;
+import emobile.by.smertex.springtodo.service.interfaces.UserJwtService;
 import emobile.by.smertex.springtodo.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,6 +34,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtTokenUtils jwtTokenUtils;
 
+    private final UserJwtService userJwtService;
+
     @Override
     @CacheEvict(value = "users", key = "#authRequest.username()")
     public String authentication(JwtRequest authRequest){
@@ -40,9 +44,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
             throw new AuthException(e.getMessage());
         }
-        UserDetails userDetails = loadUserService.loadUserByUsername(authRequest.username());
-        String token = jwtTokenUtils.generateToken(userDetails);
-        return token;
+        return generateAccess(authRequest);
     }
 
     @Override
@@ -51,5 +53,20 @@ public class AuthServiceImpl implements AuthService {
         return Optional.of(new SecurityUserDto(
                 (String) authentication.getPrincipal(),
                 authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(Role.ADMIN.getEditedRole()))));
+    }
+
+    private String generateAccess(JwtRequest authRequest){
+        UserDetails userDetails = loadUserService.loadUserByUsername(authRequest.username());
+        String token = jwtTokenUtils.generateToken(userDetails);
+        userJwtService.save(UserJwt.builder()
+                .jwt(token)
+                .email(userDetails.getUsername())
+                .roles(jwtTokenUtils.getRoles(token)
+                        .stream()
+                        .map(Role::deletePrefix)
+                        .map(Role::valueOf)
+                        .toList())
+                .build());
+        return token;
     }
 }
