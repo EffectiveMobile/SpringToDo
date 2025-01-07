@@ -1,4 +1,4 @@
-package emobile.by.smertex.springtodo.controller.exception;
+package emobile.by.smertex.springtodo.service.exception;
 
 import lombok.Getter;
 

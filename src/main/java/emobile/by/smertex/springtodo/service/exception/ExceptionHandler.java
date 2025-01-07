@@ -1,4 +1,4 @@
-package emobile.by.smertex.springtodo.controller.exception;
+package emobile.by.smertex.springtodo.service.exception;
 
 import emobile.by.smertex.springtodo.dto.exception.ApplicationResponse;
 import emobile.by.smertex.springtodo.util.ResponseMessage;
@@ -52,5 +52,17 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApplicationResponse> userNotFoundInDatabase(UserNotFoundInDatabaseException exception){
         return ResponseEntity.badRequest()
                 .body(new ApplicationResponse(exception.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(AuthException.class)
+    public ResponseEntity<ApplicationResponse> authException(AuthException exception){
+        return ResponseEntity.badRequest()
+                    .body(new ApplicationResponse(ResponseMessage.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED, LocalDateTime.now()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CrudException.class)
+    public ResponseEntity<ApplicationResponse> crudException(CrudException exception){
+        return ResponseEntity.badRequest()
+                .body(new ApplicationResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now()));
     }
 }

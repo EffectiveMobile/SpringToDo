@@ -3,7 +3,6 @@ package emobile.by.smertex.springtodo.controller.interfaces;
 import emobile.by.smertex.springtodo.dto.exception.ApplicationResponse;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
-import emobile.by.smertex.springtodo.dto.read.PageResponse;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
@@ -15,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.UUID;
 
 @Tag(
@@ -30,8 +30,8 @@ public interface TaskController {
                           """
     )
     @GetMapping
-    PageResponse<ReadTaskDto> findAll(@Parameter(name = "Тело фильтрации") TaskFilter filter,
-                                      @Parameter(name = "Тело пагинации") Pageable pageable);
+    List<ReadTaskDto> findAll(@Parameter(name = "Тело фильтрации") TaskFilter filter,
+                              @Parameter(name = "Тело пагинации") Pageable pageable);
 
     @Operation(
             summary = "Создает задачу",
@@ -69,7 +69,7 @@ public interface TaskController {
                           будет возвращен пустой список. ADMIN игнорирует данное ограничнние
                           """
     )
-    PageResponse<ReadCommentDto> findAllComment(@Parameter(description = "Идентификатор задачи") UUID id,
+    List<ReadCommentDto> findAllComment(@Parameter(description = "Идентификатор задачи") UUID id,
                                                 @Parameter(name = "Тело фильтрации") CommentFilter filter,
                                                 @Parameter(name = "Тело пагинации") Pageable pageable);
 

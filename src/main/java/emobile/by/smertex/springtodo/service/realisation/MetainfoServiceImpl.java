@@ -1,6 +1,6 @@
 package emobile.by.smertex.springtodo.service.realisation;
 
-import emobile.by.smertex.springtodo.controller.exception.UserNotFoundInDatabaseException;
+import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
 import emobile.by.smertex.springtodo.database.entity.realisation.Metainfo;
 import emobile.by.smertex.springtodo.database.repository.interfaces.MetainfoRepository;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
@@ -34,6 +34,7 @@ public class MetainfoServiceImpl implements MetainfoService {
                         .createdBy(userService.findByEmail(securityUserDto.email())
                                 .orElseThrow(() -> new UserNotFoundInDatabaseException(securityUserDto.email())))
                         .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
                 .build()).map(metainfoRepository::save);
     }
 

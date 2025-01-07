@@ -19,7 +19,7 @@ public class AuthControllerImpl implements AuthController {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest){
-        return authService.authentication(authRequest);
+    public ResponseEntity<String> createAuthToken(@RequestBody JwtRequest authRequest){
+        return ResponseEntity.ok(authService.authentication(authRequest));
     }
 }

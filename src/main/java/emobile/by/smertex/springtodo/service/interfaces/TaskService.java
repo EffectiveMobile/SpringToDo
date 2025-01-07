@@ -26,12 +26,12 @@ public interface TaskService {
     /**
      * Метод для сохранения задачи на основе DTO. При возникновении ошибки, указанной явно, будет откат транзакции
      */
-    Optional<ReadTaskDto> save(CreateOrUpdateTaskDto dto);
+    ReadTaskDto save(CreateOrUpdateTaskDto dto);
 
     /**
      * Метод для обновлении задачи на основе DTO. Обновление способен соврешить либо исполнитель задачи, либо ADMIN
      */
-    Optional<ReadTaskDto> update(UUID id, CreateOrUpdateTaskDto dto);
+    ReadTaskDto update(UUID id, CreateOrUpdateTaskDto dto);
 
     /**
      * Метод для удаления задачи, который доступен только пользователям с ролью ADMIN

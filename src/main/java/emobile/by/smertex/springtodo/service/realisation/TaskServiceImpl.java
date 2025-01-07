@@ -1,7 +1,7 @@
 package emobile.by.smertex.springtodo.service.realisation;
 
-import emobile.by.smertex.springtodo.controller.exception.SaveMetainfoException;
-import emobile.by.smertex.springtodo.controller.exception.UserNotFoundInDatabaseException;
+import emobile.by.smertex.springtodo.service.exception.SaveMetainfoException;
+import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
 import emobile.by.smertex.springtodo.database.entity.realisation.Task;
 import emobile.by.smertex.springtodo.database.repository.interfaces.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
@@ -11,6 +11,8 @@ import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
 import emobile.by.smertex.springtodo.mapper.realisation.CreateOrUpdateTaskDtoToTaskMapper;
 import emobile.by.smertex.springtodo.mapper.realisation.TaskToReadTaskDtoMapper;
+import emobile.by.smertex.springtodo.service.exception.SaveException;
+import emobile.by.smertex.springtodo.service.exception.UpdateException;
 import emobile.by.smertex.springtodo.service.interfaces.AuthService;
 import emobile.by.smertex.springtodo.service.interfaces.TaskService;
 import emobile.by.smertex.springtodo.service.interfaces.UserService;
@@ -54,7 +56,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(rollbackFor = {UserNotFoundInDatabaseException.class, SaveMetainfoException.class})
-    public Optional<ReadTaskDto> save(CreateOrUpdateTaskDto dto) {
+    public ReadTaskDto save(CreateOrUpdateTaskDto dto) {
         return Optional.of(dto)
                 .map(element -> {
                     Task task = createOrUpdateTaskDtoToTaskMapper.map(element);
@@ -65,12 +67,13 @@ public class TaskServiceImpl implements TaskService {
                     return task;
                 })
                 .map(taskRepository::save)
-                .map(taskToReadTaskDtoMapper::map);
+                .map(taskToReadTaskDtoMapper::map)
+                .orElseThrow(() -> new SaveException(ResponseMessage.CREATE_TASK_EXCEPTION));
     }
 
     @Override
     @Transactional
-    public Optional<ReadTaskDto> update(UUID id, CreateOrUpdateTaskDto dto) {
+    public ReadTaskDto update(UUID id, CreateOrUpdateTaskDto dto) {
         return taskRepository.findById(id)
                 .filter(this::hasAccess)
                 .map(task -> {
@@ -80,7 +83,8 @@ public class TaskServiceImpl implements TaskService {
                     return update;
                 })
                 .map(taskRepository::update)
-                .map(taskToReadTaskDtoMapper::map);
+                .map(taskToReadTaskDtoMapper::map)
+                .orElseThrow(() -> new UpdateException(ResponseMessage.UPDATE_TASK_NOT_FOUND));
     }
 
     @Override

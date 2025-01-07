@@ -2,7 +2,6 @@ package emobile.by.smertex.springtodo.service.interfaces;
 
 import emobile.by.smertex.springtodo.dto.security.JwtRequest;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
@@ -15,7 +14,7 @@ public interface AuthService {
     /**
      * Возвращает JWT при успешном прохождении аутентификации
      */
-    ResponseEntity<?> authentication(JwtRequest authRequest);
+    String authentication(JwtRequest authRequest);
 
     Optional<SecurityUserDto> takeUserFromContext();
 

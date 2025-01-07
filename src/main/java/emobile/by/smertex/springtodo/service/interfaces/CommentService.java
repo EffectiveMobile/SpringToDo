@@ -6,7 +6,6 @@ import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateCommentDto;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -25,10 +24,10 @@ public interface CommentService {
      * Сохранение комментария под существующей задачей. Пользователь может добавить комментарий только в том случае, если задача существует и он
      * является исполнителем. Условие с исполнителем ADMIN может игнорировать
      */
-    Optional<ReadCommentDto> add(UUID taskId, CreateOrUpdateCommentDto dto);
+    ReadCommentDto add(UUID taskId, CreateOrUpdateCommentDto dto);
 
     /**
      * Обновление комментария. Данная опция доступна только создателю комментария. ADMIN, включительно, не может проигнорировать данное ограничение
      */
-    Optional<ReadCommentDto> update(UUID commentId, CreateOrUpdateCommentDto dto);
+    ReadCommentDto update(UUID commentId, CreateOrUpdateCommentDto dto);
 }

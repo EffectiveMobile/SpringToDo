@@ -14,5 +14,5 @@ public interface AuthController {
             summary = "Возвращает токен",
             description = "Возвращает JWT-токен, если в базе данных присутсвует пользователь, который проходит аутентификацию"
     )
-    ResponseEntity<?> createAuthToken(JwtRequest authRequest);
+    ResponseEntity<String> createAuthToken(JwtRequest authRequest);
 }

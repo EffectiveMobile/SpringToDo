@@ -1,6 +1,7 @@
 package emobile.by.smertex.springtodo.database.repository.interfaces;
 
 import emobile.by.smertex.springtodo.database.entity.realisation.Comment;
+import emobile.by.smertex.springtodo.database.entity.realisation.Task;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
@@ -18,4 +19,6 @@ public interface CommentRepository {
     Comment save(Comment comment);
 
     Comment update(Comment comment);
+
+    void deleteAllCommentFromTask(Task task);
 }
