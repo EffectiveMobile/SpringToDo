@@ -29,7 +29,7 @@ public interface TaskController {
                           """
     )
     @GetMapping
-    List<ReadTaskDto> findAll(TaskRequest request);
+    List<ReadTaskDto> findAll(@Parameter(name = "Запрос с фильтрацией и пагинацией задач") TaskRequest request);
 
     @Operation(
             summary = "Создает задачу",
@@ -64,11 +64,11 @@ public interface TaskController {
             summary = "Поиск комментариев по задаче",
             description = """
                           Поиск комментариев по id задачи, а также фильтру и пагинации. Если пользователь попытается получить комментарии, где он не является исполнителем,
-                          будет возвращен пустой список. ADMIN игнорирует данное ограничнние
+                          будет возвращен пустой список. ADMIN игнорирует данное ограничение
                           """
     )
     List<ReadCommentDto> findAllComment(@Parameter(description = "Идентификатор задачи") UUID id,
-                                        CommentRequest commentRequest);
+                                        @Parameter(name = "Запрос с фильтрацией и пагинацией комментариев") CommentRequest commentRequest);
 
     @Operation(
             summary = "Добавление комментария к задаче",
