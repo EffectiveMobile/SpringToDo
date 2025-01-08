@@ -7,7 +7,6 @@ import emobile.by.smertex.springtodo.dto.security.JwtRequest;
 import emobile.by.smertex.springtodo.service.exception.AuthException;
 import emobile.by.smertex.springtodo.service.interfaces.UserJwtService;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;
-import emobile.by.smertex.springtodo.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +25,6 @@ public class AuthServiceImplIT {
     private final AuthServiceImpl authServiceImpl;
 
     private final UserJwtService userJwtService;
-
-    private final JwtTokenUtils jwtTokenUtils;
 
     @Test
     @SuppressWarnings("all")

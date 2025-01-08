@@ -2,9 +2,6 @@ package emobile.by.smertex.springtodo.controller.realisation;
 
 import emobile.by.smertex.springtodo.controller.interfaces.TaskController;
 import emobile.by.smertex.springtodo.dto.exception.ApplicationResponse;
-import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
-import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
 import emobile.by.smertex.springtodo.dto.request.CommentRequest;
