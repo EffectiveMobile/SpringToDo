@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -80,9 +81,14 @@ public class TaskServiceImpl implements TaskService {
                     Task update = createOrUpdateTaskDtoToTaskMapper.map(dto, task);
                     update.setPerformer(userService.findByEmail(dto.performerEmail())
                             .orElseThrow(() -> new UserNotFoundInDatabaseException(dto.performerEmail())));
+                    update.getMetainfo().setUpdatedAt(LocalDateTime.now());
                     return update;
                 })
-                .map(taskRepository::update)
+                .map(task -> {
+                    taskRepository.update(task);
+                    metainfoServiceImpl.update(task.getMetainfo());
+                    return task;
+                })
                 .map(taskToReadTaskDtoMapper::map)
                 .orElseThrow(() -> new UpdateException(ResponseMessage.UPDATE_TASK_NOT_FOUND));
     }

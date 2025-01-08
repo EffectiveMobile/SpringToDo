@@ -7,6 +7,8 @@ import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
+import emobile.by.smertex.springtodo.dto.request.CommentRequest;
+import emobile.by.smertex.springtodo.dto.request.TaskRequest;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateCommentDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
 import emobile.by.smertex.springtodo.service.interfaces.CommentService;
@@ -33,9 +35,8 @@ public class TaskControllerImpl implements TaskController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<ReadTaskDto> findAll(@RequestBody @Validated TaskFilter filter,
-                                     Pageable pageable){
-        return taskService.findAllByFilter(filter, pageable);
+    public List<ReadTaskDto> findAll(@RequestBody @Validated TaskRequest request){
+        return taskService.findAllByFilter(request.taskFilter(), request.pageable());
     }
 
     @PostMapping
@@ -57,9 +58,8 @@ public class TaskControllerImpl implements TaskController {
 
     @GetMapping(ApiPath.COMMENT_IN_TASK_PATH)
     public List<ReadCommentDto> findAllComment(@PathVariable UUID id,
-                                                       @Validated @RequestBody CommentFilter filter,
-                                                       Pageable pageable){
-        return commentService.findAllByFilter(id, filter, pageable);
+                                               @Validated @RequestBody CommentRequest commentRequest){
+        return commentService.findAllByFilter(id, commentRequest.commentFilter(), commentRequest.pageable());
     }
 
     @PostMapping(ApiPath.COMMENT_IN_TASK_PATH)

@@ -1,9 +1,11 @@
 package emobile.by.smertex.springtodo.service;
 
 import emobile.by.smertex.springtodo.annotation.IT;
+import emobile.by.smertex.springtodo.database.entity.nosql.UserJwt;
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
 import emobile.by.smertex.springtodo.dto.security.JwtRequest;
 import emobile.by.smertex.springtodo.service.exception.AuthException;
+import emobile.by.smertex.springtodo.service.interfaces.UserJwtService;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;
 import emobile.by.smertex.springtodo.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class AuthServiceImplIT {
 
     private final AuthServiceImpl authServiceImpl;
 
+    private final UserJwtService userJwtService;
+
     private final JwtTokenUtils jwtTokenUtils;
 
     @Test
@@ -34,9 +38,10 @@ public class AuthServiceImplIT {
                 .build();
 
         String token = authServiceImpl.authentication(jwtRequest);
+        UserJwt userJwt = userJwtService.findByJwt(token);
 
-        assertEquals(jwtTokenUtils.getUsername(token), ADMIN_EMAIL_TEST);
-        jwtTokenUtils.getRoles(token).contains(Role.ADMIN.getEditedRole());
+        assertEquals(userJwt.getEmail(), ADMIN_EMAIL_TEST);
+        assertTrue(userJwt.getRoles().contains(Role.ADMIN));
     }
 
     @Test
@@ -48,9 +53,9 @@ public class AuthServiceImplIT {
                 .build();
 
         String token = authServiceImpl.authentication(jwtRequest);
-
-        assertEquals(jwtTokenUtils.getUsername(token), USER_EMAIL_TEST);
-        jwtTokenUtils.getRoles(token).contains(Role.USER.getEditedRole());
+        UserJwt userJwt = userJwtService.findByJwt(token);
+        assertEquals(userJwt.getEmail(), USER_EMAIL_TEST);
+        assertTrue(userJwt.getRoles().contains(Role.USER));
     }
 
     @Test

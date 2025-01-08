@@ -9,4 +9,6 @@ import java.util.Optional;
  */
 public interface MetainfoService {
     Optional<Metainfo> save();
+
+    Metainfo update(Metainfo metainfo);
 }

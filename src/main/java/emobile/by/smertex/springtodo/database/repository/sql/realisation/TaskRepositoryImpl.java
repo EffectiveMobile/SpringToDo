@@ -74,7 +74,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                                                         AND (?::VARCHAR IS NULL OR ? = t.status)
                                                         AND (?::VARCHAR IS NULL OR ? = t.priority)
                                                         AND (?::VARCHAR IS NULL OR t.name LIKE ? || '%')
-                                                        AND (?::VARCHAR = u1.email OR ? = TRUE)
+                                                        AND (?::VARCHAR = u1.email OR ? IS TRUE)
                                                      LIMIT ?
                                                      OFFSET ?
                                                      """;
@@ -86,7 +86,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     private static final String UPDATE_SQL = """
                                              UPDATE task
-                                             SET name = ?, 
+                                             SET name = ?,
                                                  status = ?, 
                                                  priority = ?, 
                                                  description = ?, 

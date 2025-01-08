@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -156,7 +157,11 @@ public class TaskServiceImplIT {
                 .name("Test save task")
                 .performerEmail(USER_EMAIL_TEST)
                 .build();
+        LocalDateTime startUpdateTime = taskServiceImpl.findById(TASK_ID_WHERE_PERFORMER_USER_TEST).orElseThrow().getMetainfo().getUpdatedAt();
         ReadTaskDto task = taskServiceImpl.update(TASK_ID_WHERE_PERFORMER_USER_TEST, createOrUpdateTaskDto);
+        LocalDateTime updatedTime = taskServiceImpl.findById(TASK_ID_WHERE_PERFORMER_USER_TEST).orElseThrow().getMetainfo().getUpdatedAt();
+
+        assertNotEquals(startUpdateTime, updatedTime);
         assertNotNull(task);
         assertEquals(task.status(), Status.IN_PROGRESS);
         assertEquals(task.priority(), Priority.HIGHEST);

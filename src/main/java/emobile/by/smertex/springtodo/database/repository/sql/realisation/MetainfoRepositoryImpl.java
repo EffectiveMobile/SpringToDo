@@ -21,6 +21,12 @@ public class MetainfoRepositoryImpl implements MetainfoRepository {
                                            VALUES (?, ?, ?)
                                            """;
 
+    private static final String UPDATE_SQL = """
+                                             UPDATE metainfo
+                                             SET created_at = ?, updated_at = ?, created_by = ?
+                                             WHERE id = ?
+                                             """;
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -37,6 +43,15 @@ public class MetainfoRepositoryImpl implements MetainfoRepository {
         UUID id = (UUID) keyHolder.getKeys().get("id");
         if(id != null)
             metainfo.setId(id);
+        return metainfo;
+    }
+
+    @Override
+    public Metainfo update(Metainfo metainfo) {
+        jdbcTemplate.update(
+                UPDATE_SQL,
+                metainfo.getCreatedAt(), metainfo.getUpdatedAt(), metainfo.getCreatedBy().getId(), metainfo.getId()
+        );
         return metainfo;
     }
 }

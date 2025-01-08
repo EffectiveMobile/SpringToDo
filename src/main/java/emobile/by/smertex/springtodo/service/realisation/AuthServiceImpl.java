@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Optional.of(new SecurityUserDto(
                 (String) authentication.getPrincipal(),
-                authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(Role.ADMIN.getEditedRole()))));
+                authentication.getAuthorities().stream().anyMatch(role -> role.equals(Role.ADMIN))));
     }
 
     private String generateAccess(JwtRequest authRequest){

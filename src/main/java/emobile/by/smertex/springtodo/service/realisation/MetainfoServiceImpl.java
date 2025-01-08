@@ -38,4 +38,9 @@ public class MetainfoServiceImpl implements MetainfoService {
                 .build()).map(metainfoRepository::save);
     }
 
+    @Override
+    public Metainfo update(Metainfo metainfo) {
+        return metainfoRepository.update(metainfo);
+    }
+
 }
