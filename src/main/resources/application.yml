@@ -2,7 +2,7 @@ spring:
   application:
     name: SpringToDo
   datasource:
-    url: jdbc:postgresql://db:5434/spring-todo_db
+    url: jdbc:postgresql://postgres-spring-todo:5432/spring-todo_db
     username: Smertex
     password: Xz1g3n41g4j2F4vbsyEbgbmSER4IEHsdf3h
     driver-class-name: org.postgresql.Driver

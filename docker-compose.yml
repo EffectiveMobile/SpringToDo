@@ -6,6 +6,7 @@ volumes:
 services:
   db:
     image: postgres
+    container_name: postgres-spring-todo
     environment:
       - POSTGRES_USER=Smertex
       - POSTGRES_PASSWORD=Xz1g3n41g4j2F4vbsyEbgbmSER4IEHsdf3h
@@ -13,12 +14,12 @@ services:
     volumes:
       - pg_spring-todo:/var/lib/postgresql/data
     ports:
-      - "127.0.0.1:5434:5434"
+      - "127.0.0.1:5434:5432"
   redis:
     image: redis:latest
     container_name: redis
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
   app:
     build:
       context: .
@@ -27,5 +28,5 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://db:5434/spring-todo_db'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://postgres-spring-todo:5432/spring-todo_db'
       JAVA_OPTS: '-Xmx512m'
