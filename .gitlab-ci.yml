@@ -1,0 +1,34 @@
+image: maven:3.9.4-eclipse-temurin-21
+
+stages:
+  - build
+  - test
+
+variables:
+  MAVEN_OPTS: "-Dfile.encoding=UTF-8"
+  SPRING_PROFILES_ACTIVE: "test"
+
+cache:
+  paths:
+    - .m2/repository
+
+build:
+  stage: build
+  script:
+    - chmod +x mvnw
+    - ./mvnw clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - dev
+    - main
+
+test:
+  stage: test
+  script:
+    - chmod +x mvnw
+    - ./mvnw test
+  only:
+    - dev
+    - main
