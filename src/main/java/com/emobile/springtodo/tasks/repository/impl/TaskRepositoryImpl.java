@@ -1,11 +1,11 @@
-package com.emobile.springtodo.tasks.repository;
+package com.emobile.springtodo.tasks.repository.impl;
 
 import com.emobile.springtodo.tasks.dto.in.UpdateTaskDto;
 import com.emobile.springtodo.tasks.model.Task;
 import com.emobile.springtodo.tasks.model.entity.Priority;
 import com.emobile.springtodo.tasks.model.entity.Status;
 import com.emobile.springtodo.users.model.User;
-import com.emobile.springtodo.users.repository.UserRepository;
+import com.emobile.springtodo.users.repository.UserRepositoryDao;
 import com.emobile.springtodo.utils.exception.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,11 @@ import java.util.Objects;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TaskRepositoryImpl implements TaskRepository {
+public class TaskRepositoryImpl {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final UserRepository userRepository;
+    private final UserRepositoryDao userRepository;
 
     private static final String QUERY_SELECT = """
                                                SELECT *
@@ -38,7 +38,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                                                AND tasks.id = ?
                                                """;
 
-    @Override
+
     public List<Task> getListOfAllTasks(Integer from, Integer size) {
 
     final String sqlQuery = """
@@ -51,7 +51,7 @@ public class TaskRepositoryImpl implements TaskRepository {
         return jdbcTemplate.query(sqlQuery, this::makeTask, from, size);
     }
 
-    @Override
+
     public Task getTaskByAuthorIdAndTaskId(Long authorId, Long taskId) {
 
         SqlRowSet taskRows = jdbcTemplate.queryForRowSet(QUERY_SELECT, authorId, taskId);
@@ -64,7 +64,7 @@ public class TaskRepositoryImpl implements TaskRepository {
         return jdbcTemplate.queryForObject(QUERY_SELECT, this::makeTask, authorId, taskId);
     }
 
-    @Override
+
     public Task createTaskByAuthorId(Task task) {
 
         final String sqlQuery = """
@@ -93,7 +93,7 @@ public class TaskRepositoryImpl implements TaskRepository {
         return task;
     }
 
-    @Override
+
     public Task updateTaskByAuthorId(Long authorId, Long taskId, UpdateTaskDto updateTaskDto) {
 
         SqlRowSet taskRows = jdbcTemplate.queryForRowSet(QUERY_SELECT, authorId, taskId);
@@ -115,7 +115,7 @@ public class TaskRepositoryImpl implements TaskRepository {
         return this.getTaskByAuthorIdAndTaskId(authorId, taskId);
     }
 
-    @Override
+
     public Task deleteTaskByAuthorId(Long authorId, Long taskId) {
 
         final Task task = this.getTaskByAuthorIdAndTaskId(authorId, taskId);

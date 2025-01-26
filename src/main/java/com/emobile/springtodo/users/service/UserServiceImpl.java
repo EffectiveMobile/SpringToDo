@@ -3,7 +3,8 @@ package com.emobile.springtodo.users.service;
 import com.emobile.springtodo.users.dto.in.UpdateUserAccount;
 import com.emobile.springtodo.users.dto.in.NewUserRequestDto;
 import com.emobile.springtodo.users.dto.out.UserResponseDto;
-import com.emobile.springtodo.users.repository.UserRepository;
+import com.emobile.springtodo.users.model.User;
+import com.emobile.springtodo.users.repository.UserRepositoryDao;
 import com.emobile.springtodo.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryDao userRepository;
 
     @Override
     public List<UserResponseDto> getListOfUsersDto(Integer from, Integer size) {
@@ -33,13 +34,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createUserAccount(NewUserRequestDto newUserDto) {
 
-        return UserMapper.toUserResponseDto(userRepository.createUserAccount(newUserDto));
+        return UserMapper.toUserResponseDto(userRepository.createUserAccount(UserMapper.toUser(newUserDto)));
     }
 
     @Override
     public UserResponseDto updateUserAccount(Long userId, UpdateUserAccount updateUserDto) {
 
-        return UserMapper.toUserResponseDto(userRepository.updateUserAccount(userId, updateUserDto));
+        User user = userRepository.getUserById(userId);
+
+        if (updateUserDto.password() != null) {
+            user.setPassword(updateUserDto.password());
+        }
+
+        return UserMapper.toUserResponseDto(userRepository.updateUserAccount(userId, user));
     }
 
     @Override

@@ -1,10 +1,9 @@
 package com.emobile.springtodo.tasks.repository;
 
-import com.emobile.springtodo.tasks.dto.in.UpdateTaskDto;
 import com.emobile.springtodo.tasks.model.Task;
 import java.util.List;
 
-public interface TaskRepository {
+public interface TaskRepositoryDao {
 
     List<Task> getListOfAllTasks(Integer from, Integer size);
 
@@ -12,7 +11,7 @@ public interface TaskRepository {
 
     Task createTaskByAuthorId(Task task);
 
-    Task updateTaskByAuthorId(Long authorId, Long taskId, UpdateTaskDto updateTaskDto);
+    Task update(Task updateTaskDto);
 
     Task deleteTaskByAuthorId(Long authorId, Long taskId);
 }

@@ -1,4 +1,4 @@
-package com.emobile.springtodo.users.repository;
+package com.emobile.springtodo.users.repository.impl;
 
 import com.emobile.springtodo.users.dto.in.UpdateUserAccount;
 import com.emobile.springtodo.users.dto.in.NewUserRequestDto;
@@ -20,7 +20,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -28,7 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private static final String MESSAGE_ID = "User with userid: {} was sent";
 
-    @Override
+
     public List<User> getAllUsersList(Integer from, Integer size) {
 
         final String sqlQuery = """
@@ -41,7 +41,7 @@ public class UserRepositoryImpl implements UserRepository {
         return jdbcTemplate.query(sqlQuery, this::makeUser, from, size);
     }
 
-    @Override
+
     public User getUserById(Long userId) {
 
         final String sqlQuery = """
@@ -67,7 +67,7 @@ public class UserRepositoryImpl implements UserRepository {
         return jdbcTemplate.queryForObject(checkQuery, this::makeUser, userId);
     }
 
-    @Override
+
     public User createUserAccount(NewUserRequestDto newUserDto) {
 
         final String sqlQuery = """
@@ -96,7 +96,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .build();
     }
 
-    @Override
+
     public User updateUserAccount(Long userId, UpdateUserAccount updateUserDto) {
 
         final String checkQuery = """
@@ -123,7 +123,7 @@ public class UserRepositoryImpl implements UserRepository {
         return getUserById(userId);
     }
 
-    @Override
+
     public User deleteUserAccount(Long userId) {
 
         final String sqlQuery = """

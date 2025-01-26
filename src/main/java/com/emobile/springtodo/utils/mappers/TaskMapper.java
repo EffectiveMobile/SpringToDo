@@ -1,5 +1,6 @@
 package com.emobile.springtodo.utils.mappers;
 
+import com.emobile.springtodo.tasks.dto.in.UpdateTaskDto;
 import com.emobile.springtodo.tasks.dto.out.TaskResponseDto;
 import com.emobile.springtodo.tasks.model.Task;
 import com.emobile.springtodo.utils.exception.exceptions.BadRequestException;

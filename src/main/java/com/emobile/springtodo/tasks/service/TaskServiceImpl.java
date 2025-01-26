@@ -4,9 +4,9 @@ import com.emobile.springtodo.tasks.dto.in.NewTaskRequestDto;
 import com.emobile.springtodo.tasks.dto.in.UpdateTaskDto;
 import com.emobile.springtodo.tasks.dto.out.TaskResponseDto;
 import com.emobile.springtodo.tasks.model.Task;
-import com.emobile.springtodo.tasks.repository.TaskRepository;
+import com.emobile.springtodo.tasks.repository.TaskRepositoryDao;
 import com.emobile.springtodo.users.model.User;
-import com.emobile.springtodo.users.repository.UserRepository;
+import com.emobile.springtodo.users.repository.UserRepositoryDao;
 import com.emobile.springtodo.utils.mappers.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
-    private final TaskRepository taskRepository;
+    private final TaskRepositoryDao taskRepository;
 
-    private final UserRepository userRepository;
+    private final UserRepositoryDao userRepository;
 
     @Override
     public List<TaskResponseDto> getListOfAllTasks(Integer from, Integer size) {
@@ -59,8 +59,28 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto updateTaskByAuthorId(Long authorId, Long taskId, UpdateTaskDto updateTaskDto) {
 
+        Task task = taskRepository.getTaskByAuthorIdAndTaskId(authorId, taskId);
 
-        return TaskMapper.toTaskResponseDto(taskRepository.updateTaskByAuthorId(authorId, taskId, updateTaskDto));
+        if (updateTaskDto.header() != null) {
+            task.setHeader(updateTaskDto.header());
+        }
+
+        if (updateTaskDto.description() != null) {
+            task.setDescription(updateTaskDto.description());
+        }
+
+        if (updateTaskDto.status() != null) {
+            task.setStatus(updateTaskDto.status());
+        }
+
+        if (updateTaskDto.assignee() != null) {
+
+            User assignee = userRepository.getUserById(updateTaskDto.assignee());
+            task.setAssignee(assignee);
+        }
+
+        return TaskMapper.toTaskResponseDto(
+                taskRepository.update(task));
     }
 
     @Override
