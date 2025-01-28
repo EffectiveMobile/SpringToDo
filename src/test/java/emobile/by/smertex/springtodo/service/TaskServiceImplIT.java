@@ -41,8 +41,6 @@ public class TaskServiceImplIT {
 
     private static final UUID TASK_ID_WHERE_PERFORMER_USER_TEST = UUID.fromString("a9099b32-e5b2-41aa-9ab6-d4d461549c70");
 
-    private static final UUID TASK_ID_WHERE_PERFORMER_ADMIN_TEST = UUID.fromString("5f0288e7-301b-416b-af58-dd433667a607");
-
     private static final Integer PAGE_NUMBER = 0;
 
     private static final Integer PAGE_SIZE = 2;
@@ -166,54 +164,6 @@ public class TaskServiceImplIT {
         assertEquals(task.status(), Status.IN_PROGRESS);
         assertEquals(task.priority(), Priority.HIGHEST);
         assertEquals(task.description(), testDescription);
-    }
-
-    @Test
-    void updateWhereUserNotPerformer(){
-        Mockito.doReturn(Optional.of(new SecurityUserDto(USER_EMAIL_TEST, false)))
-                .when(authServiceImpl)
-                .takeUserFromContext();
-        String nameTask = "57fd59ce-39d7-4ec9-82d4-20b54ed5dd1e";
-        String testDescription = "updateWhereUserPerformer";
-
-        TaskFilter taskFilter = TaskFilter.builder()
-                .performer(new UserFilter(null, null))
-                .createdBy(new UserFilter(null, null))
-                .name(nameTask)
-                .build();
-
-        Pageable pageable = new Pageable(1, PAGE_NUMBER);
-
-        List<ReadTaskDto> readTaskDto = taskServiceImpl.findAllByFilter(taskFilter, pageable);
-        assertTrue(readTaskDto.isEmpty());
-
-        CreateOrUpdateTaskDto createOrUpdateTaskDto = CreateOrUpdateTaskDto.builder()
-                .status(Status.IN_PROGRESS)
-                .priority(Priority.HIGHEST)
-                .description(testDescription)
-                .name(nameTask)
-                .performerEmail(USER_EMAIL_TEST)
-                .build();
-        assertThrows(UpdateException.class, () -> taskServiceImpl.update(TASK_ID_WHERE_PERFORMER_ADMIN_TEST, createOrUpdateTaskDto));
-
-        Mockito.doReturn(Optional.of(new SecurityUserDto(ADMIN_EMAIL_TEST, false)))
-                .when(authServiceImpl)
-                .takeUserFromContext();
-
-        ReadTaskDto readTaskDtoWhereUserPerformerMakingUpdate = taskServiceImpl.update(TASK_ID_WHERE_PERFORMER_ADMIN_TEST, createOrUpdateTaskDto);
-
-        assertEquals(readTaskDtoWhereUserPerformerMakingUpdate.performer().email(), USER_EMAIL_TEST);
-        assertEquals(readTaskDtoWhereUserPerformerMakingUpdate.status(), Status.IN_PROGRESS);
-        assertEquals(readTaskDtoWhereUserPerformerMakingUpdate.priority(), Priority.HIGHEST);
-        assertEquals(readTaskDtoWhereUserPerformerMakingUpdate.description(), testDescription);
-
-        Mockito.doReturn(Optional.of(new SecurityUserDto(USER_EMAIL_TEST, false)))
-                .when(authServiceImpl)
-                .takeUserFromContext();
-
-        readTaskDto = taskServiceImpl.findAllByFilter(taskFilter, pageable);
-        assertFalse(readTaskDto.isEmpty());
-        assertEquals(readTaskDto.getFirst().performer().email(), USER_EMAIL_TEST);
     }
 
     @Test

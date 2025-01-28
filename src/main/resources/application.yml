@@ -1,18 +1,25 @@
 spring:
+
   application:
     name: SpringToDo
+
   datasource:
-    url: jdbc:postgresql://postgres-spring-todo:5432/spring-todo_db
+    url: jdbc:postgresql://localhost:5434/spring-todo_db
     username: Smertex
     password: Xz1g3n41g4j2F4vbsyEbgbmSER4IEHsdf3h
     driver-class-name: org.postgresql.Driver
+
   jpa:
     open-in-view: false
+
     properties.hibernate:
       show_sql: true
       format_sql: true
       hbm2ddl.auto: validate
+      current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+
   liquibase:
     enabled: true
+
   config:
     import: classpath:jwt.yml,classpath:server.yml,classpath:swagger.yml, classpath:redis.yml

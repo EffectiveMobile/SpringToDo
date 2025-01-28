@@ -2,7 +2,7 @@ package emobile.by.smertex.springtodo.service.realisation;
 
 import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Comment;
-import emobile.by.smertex.springtodo.database.repository.sql.interfaces.CommentRepository;
+import emobile.by.smertex.springtodo.database.repository.sql.CommentRepository;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;
@@ -18,6 +18,7 @@ import emobile.by.smertex.springtodo.service.interfaces.TaskService;
 import emobile.by.smertex.springtodo.service.interfaces.UserService;
 import emobile.by.smertex.springtodo.util.ResponseMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
+
 
     private final CommentRepository commentRepository;
 

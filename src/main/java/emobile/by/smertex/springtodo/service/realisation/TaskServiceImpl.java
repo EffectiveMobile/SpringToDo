@@ -3,7 +3,7 @@ package emobile.by.smertex.springtodo.service.realisation;
 import emobile.by.smertex.springtodo.service.exception.SaveMetainfoException;
 import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
-import emobile.by.smertex.springtodo.database.repository.sql.interfaces.TaskRepository;
+import emobile.by.smertex.springtodo.database.repository.sql.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
@@ -18,6 +18,7 @@ import emobile.by.smertex.springtodo.service.interfaces.TaskService;
 import emobile.by.smertex.springtodo.service.interfaces.UserService;
 import emobile.by.smertex.springtodo.util.ResponseMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TaskServiceImpl implements TaskService {
+
 
     private final TaskRepository taskRepository;
 

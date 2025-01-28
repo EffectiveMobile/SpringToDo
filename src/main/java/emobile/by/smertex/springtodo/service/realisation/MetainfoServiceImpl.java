@@ -2,7 +2,7 @@ package emobile.by.smertex.springtodo.service.realisation;
 
 import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseException;
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Metainfo;
-import emobile.by.smertex.springtodo.database.repository.sql.interfaces.MetainfoRepository;
+import emobile.by.smertex.springtodo.database.repository.sql.MetainfoRepository;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.service.interfaces.AuthService;
 import emobile.by.smertex.springtodo.service.interfaces.MetainfoService;

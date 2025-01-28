@@ -1,4 +1,4 @@
-package emobile.by.smertex.springtodo.database.repository.sql.interfaces;
+package emobile.by.smertex.springtodo.database.repository.sql;
 
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;

@@ -1,11 +1,11 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/db.changelog-1.0.sql
+      file: db/changelog/db.create_table-1.0.sql
   - include:
-      file: db/changelog/db.changelog-2.0.sql
+      file: db/changelog/db.insert_users-1.0.sql
   - include:
-      file: db/changelog/db.changelog-2.1.sql
+      file: db/changelog/db.insert_task-1.0.sql
   - include:
-      file: db/changelog/db.changelog-2.2.sql
+      file: db/changelog/db.insert_comment-1.0.sql
   - include:
-      file: db/changelog/db.changelog-2.3.sql
+      file: db/changelog/db.update_password_for_users-1.0.sql
