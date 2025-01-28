@@ -27,14 +27,14 @@ public class MetainfoServiceImpl implements MetainfoService {
 
     @Override
     @Transactional
-    public Optional<Metainfo> save(){
+    public Optional<Metainfo> save() {
         SecurityUserDto securityUserDto = authService.takeUserFromContext()
                 .orElseThrow();
         return Optional.of(Metainfo.builder()
-                        .createdBy(userService.findByEmail(securityUserDto.email())
-                                .orElseThrow(() -> new UserNotFoundInDatabaseException(securityUserDto.email())))
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
+                .createdBy(userService.findByEmail(securityUserDto.email())
+                        .orElseThrow(() -> new UserNotFoundInDatabaseException(securityUserDto.email())))
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build()).map(metainfoRepository::save);
     }
 

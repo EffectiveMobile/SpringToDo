@@ -34,23 +34,23 @@ public class TaskControllerImpl implements TaskController {
 
     @GetMapping
     public List<ReadTaskDto> findAll(@RequestBody @Validated TaskRequest request,
-                                     Pageable pageable){
+                                     Pageable pageable) {
         return taskService.findAllByFilter(request.taskFilter(), pageable);
     }
 
     @PostMapping
-    public ReadTaskDto create(@Validated @RequestBody CreateOrUpdateTaskDto dto){
+    public ReadTaskDto create(@Validated @RequestBody CreateOrUpdateTaskDto dto) {
         return taskService.save(dto);
     }
 
     @PutMapping(ApiPath.ID_TASK_PATH)
     public ReadTaskDto updateTask(@PathVariable UUID id,
-                                  @Validated @RequestBody CreateOrUpdateTaskDto dto){
+                                  @Validated @RequestBody CreateOrUpdateTaskDto dto) {
         return taskService.update(id, dto);
     }
 
     @DeleteMapping(ApiPath.ID_TASK_PATH)
-    public ResponseEntity<ApplicationResponse> deleteTask(@PathVariable UUID id){
+    public ResponseEntity<ApplicationResponse> deleteTask(@PathVariable UUID id) {
         return taskService.delete(id) ? ResponseEntity.ok(new ApplicationResponse(ResponseMessage.DELETE_TASK_SUCCESSFULLY, HttpStatus.OK, LocalDateTime.now())) :
                 ResponseEntity.badRequest().body(new ApplicationResponse(ResponseMessage.DELETE_TASK_FAILED, HttpStatus.BAD_REQUEST, LocalDateTime.now()));
     }
@@ -58,19 +58,19 @@ public class TaskControllerImpl implements TaskController {
     @GetMapping(ApiPath.COMMENT_IN_TASK_PATH)
     public List<ReadCommentDto> findAllComment(@PathVariable UUID id,
                                                @Validated @RequestBody CommentRequest commentRequest,
-                                               Pageable pageable){
+                                               Pageable pageable) {
         return commentService.findAllByFilter(id, commentRequest.commentFilter(), pageable);
     }
 
     @PostMapping(ApiPath.COMMENT_IN_TASK_PATH)
     public ReadCommentDto addComment(@PathVariable UUID id,
-                                     @Validated @RequestBody CreateOrUpdateCommentDto dto){
+                                     @Validated @RequestBody CreateOrUpdateCommentDto dto) {
         return commentService.add(id, dto);
     }
 
     @PutMapping(ApiPath.COMMENT_UPDATE_PATH)
     public ReadCommentDto updateComment(@PathVariable UUID id,
-                                        @Validated @RequestBody CreateOrUpdateCommentDto dto){
+                                        @Validated @RequestBody CreateOrUpdateCommentDto dto) {
         return commentService.update(id, dto);
     }
 

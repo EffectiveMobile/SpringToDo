@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     private final TaskService taskService;
 
     @Override
-    public List<ReadCommentDto> findAllByFilter(UUID taskId, CommentFilter commentFilter, Pageable pageable){
+    public List<ReadCommentDto> findAllByFilter(UUID taskId, CommentFilter commentFilter, Pageable pageable) {
         return commentRepository.findAllByFilter(taskId, commentFilter, authService.takeUserFromContext().orElseThrow(), pageable)
                 .stream()
                 .map(commentToReadCommentDtoMapper::map)
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public ReadCommentDto add(UUID taskId, CreateOrUpdateCommentDto dto){
+    public ReadCommentDto add(UUID taskId, CreateOrUpdateCommentDto dto) {
         SecurityUserDto user = authService.takeUserFromContext().orElseThrow();
         return taskService.findById(taskId)
                 .filter(task -> user.isAdmin() || task.getPerformer().getEmail().equals(user.email()))
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public ReadCommentDto update(UUID commentId, CreateOrUpdateCommentDto dto){
+    public ReadCommentDto update(UUID commentId, CreateOrUpdateCommentDto dto) {
         return commentRepository.findById(commentId)
                 .filter(comment -> authService.takeUserFromContext().orElseThrow().email().equals(comment.getCreatedBy().getEmail()))
                 .map(comment -> createOrUpdateCommentDtoToCommentMapper.map(dto, comment))

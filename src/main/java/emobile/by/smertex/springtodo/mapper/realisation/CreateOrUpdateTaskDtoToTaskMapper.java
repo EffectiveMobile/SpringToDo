@@ -16,11 +16,11 @@ public class CreateOrUpdateTaskDtoToTaskMapper implements Mapper<CreateOrUpdateT
     }
 
     @Override
-    public Task map(CreateOrUpdateTaskDto from, Task to){
+    public Task map(CreateOrUpdateTaskDto from, Task to) {
         return copy(from, to);
     }
 
-    private Task copy(CreateOrUpdateTaskDto from, Task to){
+    private Task copy(CreateOrUpdateTaskDto from, Task to) {
         to.setName(from.name());
         to.setDescription(from.description());
         to.setStatus(from.status());

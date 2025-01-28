@@ -13,22 +13,22 @@ import java.util.UUID;
 
 @NamedQueries(
         @NamedQuery(name = "findAllByFilterTask",
-                    query = """
-                            select t from Task t
-                               join fetch t.performer u1
-                               join Metainfo m on t.metainfo.id = m.id
-                               join User u on t.performer.id = u.id
-                               where (:filterCreatedByEmail is null or :filterCreatedByEmail = m.createdBy.email)
-                                    and (:filterCreatedByRole is null or :filterCreatedByRole = m.createdBy.role)
-                                    and (cast(cast(:filterCreatedAt as text) as timestamp) is null or :filterCreatedAt <= m.createdAt)
-                                    and (cast(cast(:filterUpdatedAt as text) as timestamp) is null or :filterUpdatedAt >= m.updatedAt)
-                                    and (:status is null or :status = t.status)
-                                    and (:priority is null or :priority = t.priority)
-                                    and (:filterPerformerEmail is null or :filterPerformerEmail = t.performer.email)
-                                    and (:filterPerformerRole is null or :filterPerformerRole = t.performer.role)
-                                    and (:filterName is null or t.name like concat('%', cast(:filterName as text), '%'))
-                                    and (:userEmail = t.performer.email or :userIsAdmin = true)
-                            """)
+                query = """
+                        select t from Task t
+                           join fetch t.performer u1
+                           join Metainfo m on t.metainfo.id = m.id
+                           join User u on t.performer.id = u.id
+                           where (:filterCreatedByEmail is null or :filterCreatedByEmail = m.createdBy.email)
+                                and (:filterCreatedByRole is null or :filterCreatedByRole = m.createdBy.role)
+                                and (cast(cast(:filterCreatedAt as text) as timestamp) is null or :filterCreatedAt <= m.createdAt)
+                                and (cast(cast(:filterUpdatedAt as text) as timestamp) is null or :filterUpdatedAt >= m.updatedAt)
+                                and (:status is null or :status = t.status)
+                                and (:priority is null or :priority = t.priority)
+                                and (:filterPerformerEmail is null or :filterPerformerEmail = t.performer.email)
+                                and (:filterPerformerRole is null or :filterPerformerRole = t.performer.role)
+                                and (:filterName is null or t.name like concat('%', cast(:filterName as text), '%'))
+                                and (:userEmail = t.performer.email or :userIsAdmin = true)
+                        """)
 )
 @AllArgsConstructor
 @NoArgsConstructor

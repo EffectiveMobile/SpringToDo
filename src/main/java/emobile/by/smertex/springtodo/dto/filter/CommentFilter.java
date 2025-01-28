@@ -7,5 +7,5 @@ import lombok.Builder;
 
 @Schema(description = "Фильтр комментариев")
 @Builder
-public record CommentFilter (@Valid @NotNull(message = "Данное поле не может быть равно null") UserFilter createdBy){
+public record CommentFilter(@Valid @NotNull(message = "Данное поле не может быть равно null") UserFilter createdBy) {
 }

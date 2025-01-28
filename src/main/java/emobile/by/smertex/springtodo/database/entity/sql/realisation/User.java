@@ -13,10 +13,10 @@ import java.util.UUID;
 
 @NamedQueries({
         @NamedQuery(name = "findByEmailUser",
-                    query = """
-                            select u from User u
-                            where u.email = :email
-                            """)
+                query = """
+                        select u from User u
+                        where u.email = :email
+                        """)
 })
 @AllArgsConstructor
 @NoArgsConstructor

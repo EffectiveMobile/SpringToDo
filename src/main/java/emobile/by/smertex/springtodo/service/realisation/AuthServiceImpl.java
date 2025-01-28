@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @CacheEvict(value = "users", key = "#authRequest.username()")
-    public String authentication(JwtRequest authRequest){
+    public String authentication(JwtRequest authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password()));
         } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
@@ -48,14 +48,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<SecurityUserDto> takeUserFromContext(){
+    public Optional<SecurityUserDto> takeUserFromContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Optional.of(new SecurityUserDto(
                 (String) authentication.getPrincipal(),
                 authentication.getAuthorities().stream().anyMatch(role -> role.equals(Role.ADMIN))));
     }
 
-    private String generateAccess(JwtRequest authRequest){
+    private String generateAccess(JwtRequest authRequest) {
         UserDetails userDetails = loadUserService.loadUserByUsername(authRequest.username());
         String token = jwtTokenUtils.generateToken(userDetails);
         userJwtService.save(UserJwt.builder()

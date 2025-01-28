@@ -27,7 +27,7 @@ public class JwtTokenUtils {
     @Value("${jwt.lifetime}")
     private Duration jwtLifetime;
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", getRolesInUserDetails(userDetails));
         Date issuedDate = new Date();
@@ -41,22 +41,22 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public String getUsername(String token){
+    public String getUsername(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 
-    public List<String> getRoles(String token){
+    public List<String> getRoles(String token) {
         return getAllClaimsFromToken(token).get("roles", List.class);
     }
 
-    private Claims getAllClaimsFromToken(String token){
+    private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    private List<String> getRolesInUserDetails(UserDetails userDetails){
+    private List<String> getRolesInUserDetails(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();

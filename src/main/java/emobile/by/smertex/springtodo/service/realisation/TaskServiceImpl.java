@@ -44,12 +44,12 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserService userService;
 
-    public Optional<Task> findById(UUID id){
+    public Optional<Task> findById(UUID id) {
         return taskRepository.findById(id);
     }
 
     @Override
-    public List<ReadTaskDto> findAllByFilter(TaskFilter filter, Pageable pageable){
+    public List<ReadTaskDto> findAllByFilter(TaskFilter filter, Pageable pageable) {
         return taskRepository.findAllByFilter(filter, authService.takeUserFromContext().orElseThrow(), pageable)
                 .stream()
                 .map(taskToReadTaskDtoMapper::map)
@@ -96,8 +96,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public boolean delete(UUID id){
-        if(!authService.takeUserFromContext().orElseThrow().isAdmin())
+    public boolean delete(UUID id) {
+        if (!authService.takeUserFromContext().orElseThrow().isAdmin())
             return false;
         return taskRepository.findById(id)
                 .map(task -> {
@@ -107,7 +107,7 @@ public class TaskServiceImpl implements TaskService {
                 .orElse(false);
     }
 
-    private boolean hasAccess(Task task){
+    private boolean hasAccess(Task task) {
         SecurityUserDto securityUserDto = authService.takeUserFromContext()
                 .orElseThrow();
         return task.getPerformer().getEmail().equals(securityUserDto.email()) || securityUserDto.isAdmin();

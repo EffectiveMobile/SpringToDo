@@ -37,31 +37,31 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApplicationResponse> repositoryUniqueException(DataIntegrityViolationException exception){
+    public ResponseEntity<ApplicationResponse> repositoryUniqueException(DataIntegrityViolationException exception) {
         return ResponseEntity.badRequest()
                 .body(new ApplicationResponse(ResponseMessage.SAVE_FAILED_DUE_DUPLICATE, HttpStatus.CONFLICT, LocalDateTime.now()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ApplicationResponse> incorrectData(NoSuchElementException exception){
+    public ResponseEntity<ApplicationResponse> incorrectData(NoSuchElementException exception) {
         return ResponseEntity.badRequest()
                 .body(new ApplicationResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(UserNotFoundInDatabaseException.class)
-    public ResponseEntity<ApplicationResponse> userNotFoundInDatabase(UserNotFoundInDatabaseException exception){
+    public ResponseEntity<ApplicationResponse> userNotFoundInDatabase(UserNotFoundInDatabaseException exception) {
         return ResponseEntity.badRequest()
                 .body(new ApplicationResponse(exception.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(AuthException.class)
-    public ResponseEntity<ApplicationResponse> authException(AuthException exception){
+    public ResponseEntity<ApplicationResponse> authException(AuthException exception) {
         return ResponseEntity.badRequest()
-                    .body(new ApplicationResponse(ResponseMessage.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED, LocalDateTime.now()));
+                .body(new ApplicationResponse(ResponseMessage.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED, LocalDateTime.now()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(CrudException.class)
-    public ResponseEntity<ApplicationResponse> crudException(CrudException exception){
+    public ResponseEntity<ApplicationResponse> crudException(CrudException exception) {
         return ResponseEntity.badRequest()
                 .body(new ApplicationResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, LocalDateTime.now()));
     }

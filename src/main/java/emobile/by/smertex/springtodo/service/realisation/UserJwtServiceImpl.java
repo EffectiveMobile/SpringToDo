@@ -22,7 +22,7 @@ public class UserJwtServiceImpl implements UserJwtService {
     @Override
     public UserJwt findByJwt(String jwt) {
         ValueOperations<String, UserJwt> ops = redisTemplate.opsForValue();
-        return  ops.get(jwt);
+        return ops.get(jwt);
     }
 
     @Override

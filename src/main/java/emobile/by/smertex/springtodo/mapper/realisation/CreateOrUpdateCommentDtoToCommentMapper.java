@@ -20,7 +20,7 @@ public class CreateOrUpdateCommentDtoToCommentMapper implements Mapper<CreateOrU
         return copy(from, to);
     }
 
-    private Comment copy(CreateOrUpdateCommentDto from, Comment to){
+    private Comment copy(CreateOrUpdateCommentDto from, Comment to) {
         to.setContent(from.content());
         return to;
     }

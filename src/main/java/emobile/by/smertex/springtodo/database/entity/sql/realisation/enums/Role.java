@@ -11,11 +11,11 @@ public enum Role implements GrantedAuthority {
         return name();
     }
 
-    public String getEditedRole(){
+    public String getEditedRole() {
         return "ROLE_" + name();
     }
 
-    public static String deletePrefix(String role){
+    public static String deletePrefix(String role) {
         return role.substring(5);
     }
 }

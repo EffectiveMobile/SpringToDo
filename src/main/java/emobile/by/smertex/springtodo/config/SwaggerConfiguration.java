@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Кофигурация Swagger
+ * Конфигурация Swagger
  */
 @Configuration
 public class SwaggerConfiguration {
 
     @Bean
-    public GroupedOpenApi publicTaskApi(){
+    public GroupedOpenApi publicTaskApi() {
         return GroupedOpenApi.builder()
                 .group("Tasks")
                 .pathsToMatch(ApiPath.TASK_PATH + ApiPath.ALL_PATH)
@@ -24,7 +24,7 @@ public class SwaggerConfiguration {
     }
 
     @Bean
-    public GroupedOpenApi publicAuthApi(){
+    public GroupedOpenApi publicAuthApi() {
         return GroupedOpenApi.builder()
                 .group("Authentication")
                 .pathsToMatch(ApiPath.AUTH_PATH)

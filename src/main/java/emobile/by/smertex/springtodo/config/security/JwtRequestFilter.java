@@ -40,15 +40,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         UserJwt userJwt = null;
         String jwt = null;
 
-        if(authHeader != null && authHeader.startsWith("Bearer ")){
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             userJwt = userJwtService.findByJwt(jwt);
 
-            if(userJwt == null)
+            if (userJwt == null)
                 response.getWriter().write(objectMapper.writeValueAsString(responseException(response, ResponseMessage.INVALID_JWT)));
         }
 
-        if(jwt != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     userJwt.getEmail(),
                     null,
