@@ -1,0 +1,467 @@
+openapi: 3.0.1
+info:
+  title: Task API
+  description: Это микросервис для менеджмента задач. Он реализует необходимый API для взаимодействия, а также разграничивает права между админами и пользователями с помощью работы с JWT.
+  contact:
+    name: Киселев Антон
+    url: https://vk.com/smertex
+    email: smertexx@gmail.com
+  version: '1.0'
+servers:
+  - url: http://localhost:8095
+    description: Generated server url
+tags:
+  - name: Контроллер задач
+    description: Позволяет взаимодействовать с задачами и их комментариями
+paths:
+  /api/task/{id}:
+    put:
+      tags:
+        - Контроллер задач
+      summary: Обновляет задачу
+      description: |
+        При вводе неккоректных или пустых данных будет выдана ошибка. Как обычные пользователи, так и ADMIN, могут делегировать
+        права на задачу другому пользователю. В случае с обычным пользователем, он теряет возможность взаимодействовать с задачей в тот момент,
+        как перестает быть ее исполнителем. Делегировать задачу на несуществующего пользователя невозможно
+      operationId: updateTask
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор задачи
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateTaskDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReadTaskDto'
+    delete:
+      tags:
+        - Контроллер задач
+      summary: Удаляет задачу
+      description: |
+        Метод, доступный только тем, кто авторизован как ADMIN. Позволяет удалять задачи, как следствие комментарии к ним тоже удаляются.
+        При успешном удалении возвращается ответ "Task deleted" с кодом "200". При ошибке "The task was not deleted" с кодом "400"
+      operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор задачи
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+  /api/task/comment/{id}:
+    put:
+      tags:
+        - Контроллер задач
+      summary: Обновление комментария
+      description: |
+        Обновление содержание комментария, доступно только тому пользователю, что сам оставил комментарий. Данное ограничение накладывается и на ADMIN
+      operationId: updateComment
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор комментария
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateCommentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReadCommentDto'
+  /api/task:
+    get:
+      tags:
+        - Контроллер задач
+      summary: Возвращает список всех задач
+      description: |
+        Поиск происходит по средством фильтрации и пагинации. Если пользователь попытается получить задачи, где он не является исполнителем,
+        то будет получен пустой список. ADMIN игнорирует данное ограничение и может получать любые задачи.
+      operationId: findAll
+      parameters:
+        - name: Тело фильтрации
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/TaskFilter'
+        - name: Тело пагинации
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageResponseReadTaskDto'
+    post:
+      tags:
+        - Контроллер задач
+      summary: Создает задачу
+      description: |
+        При вводе неккоректных или пустых данных будет выдана ошибка. Как обычные пользователи, так и администраторы, могут создавать
+        для других пользователей задачи. Создать задачу и делегировать ее на несуществующего пользователя невозможно
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateTaskDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReadTaskDto'
+  /api/task/{id}/comment:
+    get:
+      tags:
+        - Контроллер задач
+      summary: Поиск комментариев по задаче
+      description: |
+        Поиск комментариев по id задачи, а также фильтру и пагинации. Если пользователь попытается получить комментарии, где он не является исполнителем,
+        будет возвращен пустой список. ADMIN игнорирует данное ограничнние
+      operationId: findAllComment
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор задачи
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Тело фильтрации
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/CommentFilter'
+        - name: Тело пагинации
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageResponseReadCommentDto'
+    post:
+      tags:
+        - Контроллер задач
+      summary: Добавление комментария к задаче
+      description: |
+        Обычные пользователи могут добавлять комментарии только к тем задачам, в которых являются исполнителями. ADMIN игнорирует данное ограничение
+      operationId: addComment
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор задачи
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateCommentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReadCommentDto'
+  /api/auth:
+    post:
+      tags:
+        - Контроллер аутентификации
+      summary: Возвращает токен
+      description: Возвращает JWT-токен, если в базе данных присутсвует пользователь, который проходит аутентификацию
+      operationId: createAuthToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JwtRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+components:
+  schemas:
+    CreateOrUpdateTaskDto:
+      required:
+        - description
+        - name
+        - performerEmail
+        - priority
+        - status
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - WAITING
+            - IN_PROGRESS
+            - COMPLETED
+        priority:
+          type: string
+          enum:
+            - HIGHEST
+            - MEDIUM
+            - LOWEST
+        description:
+          type: string
+        performerEmail:
+          type: string
+      description: Сущность для создания или обновления задачи в базе данных
+    ReadTaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+            - WAITING
+            - IN_PROGRESS
+            - COMPLETED
+        priority:
+          type: string
+          enum:
+            - HIGHEST
+            - MEDIUM
+            - LOWEST
+        performer:
+          $ref: '#/components/schemas/ReadUserDto'
+      description: Сущность задачи
+    ReadUserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - USER
+            - ADMIN
+      description: Сущность пользователя
+    CreateOrUpdateCommentDto:
+      required:
+        - content
+      type: object
+      properties:
+        content:
+          type: string
+      description: Сущность для создания или обновления комментария в базе данных
+    ReadCommentDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        createdBy:
+          $ref: '#/components/schemas/ReadUserDto'
+        createdAt:
+          type: string
+          format: date-time
+      description: Сущность комментария
+    JwtRequest:
+      required:
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      description: Данные аутентификации
+    TaskFilter:
+      required:
+        - createdBy
+        - performer
+      type: object
+      properties:
+        createdBy:
+          $ref: '#/components/schemas/UserFilter'
+        createdAt:
+          type: string
+          format: date-time
+        closedAt:
+          type: string
+          format: date-time
+        performer:
+          $ref: '#/components/schemas/UserFilter'
+        status:
+          type: string
+          enum:
+            - WAITING
+            - IN_PROGRESS
+            - COMPLETED
+        priority:
+          type: string
+          enum:
+            - HIGHEST
+            - MEDIUM
+            - LOWEST
+        name:
+          type: string
+      description: Фильтр задач
+    UserFilter:
+      type: object
+      properties:
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - USER
+            - ADMIN
+      description: Фильтр по пользователю
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
+    MetadataReadTaskDto:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+      description: 'Метаданные пагинации: стараница, размер страницы, общее число элементов'
+    PageResponseReadTaskDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadTaskDto'
+        metadata:
+          $ref: '#/components/schemas/MetadataReadTaskDto'
+      description: Сущность пагинации, которая содержит в себе ее элементы
+    CommentFilter:
+      required:
+        - createdBy
+      type: object
+      properties:
+        createdBy:
+          $ref: '#/components/schemas/UserFilter'
+      description: Фильтр комментариев
+    MetadataReadCommentDto:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+      description: 'Метаданные пагинации: стараница, размер страницы, общее число элементов'
+    PageResponseReadCommentDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadCommentDto'
+        metadata:
+          $ref: '#/components/schemas/MetadataReadCommentDto'
+      description: Сущность пагинации, которая содержит в себе ее элементы
+    ApplicationResponse:
+      type: object
+      properties:
+        massage:
+          type: string
+        httpStatusCode:
+          $ref: '#/components/schemas/HttpStatusCode'
+        occurrenceTime:
+          type: string
+          format: date-time
+      description: Статус запроса, зачастую находится в обертке
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean

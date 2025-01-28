@@ -1,0 +1,3 @@
+jwt:
+  secret: 46F7748ADCED2422C7AA9CF7FDD73
+  lifetime: 300m
