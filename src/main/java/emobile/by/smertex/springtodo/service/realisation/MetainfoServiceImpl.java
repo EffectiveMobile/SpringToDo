@@ -40,7 +40,7 @@ public class MetainfoServiceImpl implements MetainfoService {
 
     @Override
     public Metainfo update(Metainfo metainfo) {
-        return metainfoRepository.update(metainfo);
+        return metainfoRepository.saveAndFlush(metainfo);
     }
 
 }

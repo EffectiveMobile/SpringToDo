@@ -10,6 +10,7 @@ import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -29,7 +30,7 @@ public interface TaskController {
                           """
     )
     @GetMapping
-    List<ReadTaskDto> findAll(@Parameter(name = "Запрос с фильтрацией и пагинацией задач") TaskRequest request);
+    List<ReadTaskDto> findAll(@Parameter(name = "Запрос с фильтрацией и пагинацией задач") TaskRequest request, Pageable pageable);
 
     @Operation(
             summary = "Создает задачу",
@@ -68,7 +69,8 @@ public interface TaskController {
                           """
     )
     List<ReadCommentDto> findAllComment(@Parameter(description = "Идентификатор задачи") UUID id,
-                                        @Parameter(name = "Запрос с фильтрацией и пагинацией комментариев") CommentRequest commentRequest);
+                                        @Parameter(name = "Запрос с фильтрацией и пагинацией комментариев") CommentRequest commentRequest,
+                                        Pageable pageable);
 
     @Operation(
             summary = "Добавление комментария к задаче",

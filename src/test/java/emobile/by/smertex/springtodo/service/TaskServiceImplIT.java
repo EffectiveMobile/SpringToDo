@@ -8,11 +8,9 @@ import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Role;
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Status;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.filter.UserFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
-import emobile.by.smertex.springtodo.service.exception.UpdateException;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;
 import emobile.by.smertex.springtodo.service.realisation.TaskServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +60,7 @@ public class TaskServiceImplIT {
                 .createdBy(new UserFilter(null, null))
                 .performer(new UserFilter(null, null))
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
         List<ReadTaskDto> tasks = taskServiceImpl.findAllByFilter(filter, pageable);
 
         assertFalse(tasks.isEmpty());
@@ -76,7 +76,7 @@ public class TaskServiceImplIT {
                 .createdBy(new UserFilter(null, null))
                 .performer(new UserFilter(ADMIN_EMAIL_TEST, null))
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
         List<ReadTaskDto> tasks = taskServiceImpl.findAllByFilter(filter, pageable);
         assertTrue(tasks.isEmpty());
 
@@ -98,7 +98,7 @@ public class TaskServiceImplIT {
                 .createdBy(new UserFilter(null, null))
                 .performer(new UserFilter(null, Role.USER))
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         List<ReadTaskDto> tasks = taskServiceImpl.findAllByFilter(filter, pageable);
 
@@ -198,7 +198,7 @@ public class TaskServiceImplIT {
                 .createdBy(new UserFilter(null, null))
                 .name(nameTask)
                 .build();
-        Pageable pageable = new Pageable(1, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(1, PAGE_SIZE);
         List<ReadTaskDto> readTaskDtoList = taskServiceImpl.findAllByFilter(taskFilter, pageable);
         assertTrue(readTaskDtoList.isEmpty());
     }

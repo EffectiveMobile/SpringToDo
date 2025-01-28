@@ -8,7 +8,6 @@ import emobile.by.smertex.springtodo.database.entity.sql.realisation.enums.Statu
 import emobile.by.smertex.springtodo.database.repository.sql.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
 import emobile.by.smertex.springtodo.dto.filter.UserFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,9 +53,10 @@ public class TaskRepositoryIT {
                 .performer(new UserFilter(null, null))
                 .priority(Priority.LOWEST)
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
-        List<Task> tasks = taskRepository.findAllByFilter(filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable);
+        List<Task> tasks = taskRepository.findAllByFilter(filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable)
+                .getContent();
 
         tasks.stream()
                 .peek(task -> assertEquals(task.getPerformer().getEmail(), USER_EMAIL_TEST))
@@ -75,9 +77,10 @@ public class TaskRepositoryIT {
                 .performer(new UserFilter(null, Role.USER))
                 .build();
 
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
-        List<Task> tasks = taskRepository.findAllByFilter(filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable);
+        List<Task> tasks = taskRepository.findAllByFilter(filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable)
+                .getContent();
 
         assertFalse(tasks.isEmpty());
 

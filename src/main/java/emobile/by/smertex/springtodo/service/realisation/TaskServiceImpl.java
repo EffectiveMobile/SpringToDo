@@ -5,7 +5,6 @@ import emobile.by.smertex.springtodo.service.exception.UserNotFoundInDatabaseExc
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
 import emobile.by.smertex.springtodo.database.repository.sql.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
@@ -18,7 +17,7 @@ import emobile.by.smertex.springtodo.service.interfaces.TaskService;
 import emobile.by.smertex.springtodo.service.interfaces.UserService;
 import emobile.by.smertex.springtodo.util.ResponseMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,7 +86,7 @@ public class TaskServiceImpl implements TaskService {
                     return update;
                 })
                 .map(task -> {
-                    taskRepository.update(task);
+                    taskRepository.saveAndFlush(task);
                     metainfoServiceImpl.update(task.getMetainfo());
                     return task;
                 })

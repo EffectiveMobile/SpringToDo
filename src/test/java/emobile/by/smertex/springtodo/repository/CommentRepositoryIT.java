@@ -7,7 +7,6 @@ import emobile.by.smertex.springtodo.database.repository.sql.CommentRepository;
 import emobile.by.smertex.springtodo.database.repository.sql.TaskRepository;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.filter.UserFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.service.realisation.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,9 +60,11 @@ public class CommentRepositoryIT {
                         .build())
                 .build();
 
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
-        List<Comment> comments = commentRepository.findAllByFilter(TASK_ID_TEST, filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable);
+        List<Comment> comments = commentRepository
+                .findAllByFilter(TASK_ID_TEST, filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable)
+                .getContent();
 
         Assertions.assertTrue(comments.size() <= PAGE_SIZE);
 
@@ -86,9 +89,10 @@ public class CommentRepositoryIT {
                         .build())
                 .build();
 
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
-        List<Comment> comments = commentRepository.findAllByFilter(TASK_ID_TEST, filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable);
+        List<Comment> comments = commentRepository.findAllByFilter(TASK_ID_TEST, filter, authServiceImpl.takeUserFromContext().orElseThrow(), pageable)
+                .getContent();
         Task task = taskRepository.findById(TASK_ID_TEST)
                 .orElseThrow();
 

@@ -2,9 +2,9 @@ package emobile.by.smertex.springtodo.service.interfaces;
 
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Task;
 import emobile.by.smertex.springtodo.dto.filter.TaskFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadTaskDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateTaskDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;

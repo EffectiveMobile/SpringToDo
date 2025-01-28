@@ -3,27 +3,11 @@ package emobile.by.smertex.springtodo.database.entity.sql.realisation;
 import emobile.by.smertex.springtodo.database.entity.sql.interfaces.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@NamedQueries(
-        @NamedQuery(name = "findAllByFilterComment",
-                    query = """
-                            select c from Comment c
-                            join fetch c.createdBy u1
-                            join Task t on t.id = c.task.id
-                            join User u2 on u2.id = t.performer.id
-                            where t.id = :taskId
-                                and (:createdByEmail is null or :createdByEmail = c.createdBy.email)
-                                and (:createdByRole is null or :createdByRole = c.createdBy.role)
-                                and (:securityUserDtoEmail = t.performer.email or :securityUserDtoIsAdmin = true)
-                            """
-        )
-)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

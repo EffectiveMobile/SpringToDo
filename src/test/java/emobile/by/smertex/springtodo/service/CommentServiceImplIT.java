@@ -3,7 +3,6 @@ package emobile.by.smertex.springtodo.service;
 import emobile.by.smertex.springtodo.annotation.IT;
 import emobile.by.smertex.springtodo.dto.filter.CommentFilter;
 import emobile.by.smertex.springtodo.dto.filter.UserFilter;
-import emobile.by.smertex.springtodo.dto.read.Pageable;
 import emobile.by.smertex.springtodo.dto.read.ReadCommentDto;
 import emobile.by.smertex.springtodo.dto.security.SecurityUserDto;
 import emobile.by.smertex.springtodo.dto.update.CreateOrUpdateCommentDto;
@@ -20,7 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -67,7 +67,7 @@ public class CommentServiceImplIT {
                 .createdBy(UserFilter.builder()
                         .build())
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         List<ReadCommentDto> readCommentDtoList = commentServiceImpl.findAllByFilter(TASK_ID_WHERE_PERFORMER_USER_TEST, filter, pageable);
 
@@ -85,7 +85,7 @@ public class CommentServiceImplIT {
                 .createdBy(UserFilter.builder()
                         .build())
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         List<ReadCommentDto> readCommentDtoListNotPerformer = commentServiceImpl.findAllByFilter(TASK_ID_WHERE_PERFORMER_ADMIN_TEST, filter, pageable);
         assertTrue(readCommentDtoListNotPerformer.isEmpty());
@@ -106,7 +106,7 @@ public class CommentServiceImplIT {
                 .createdBy(UserFilter.builder()
                         .build())
                 .build();
-        Pageable pageable = new Pageable(PAGE_SIZE, PAGE_NUMBER);
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
         List<ReadCommentDto> readCommentDtoListNotPerformer = commentServiceImpl.findAllByFilter(TASK_ID_WHERE_PERFORMER_USER_TEST, filter, pageable);
         assertFalse(readCommentDtoListNotPerformer.isEmpty());
     }

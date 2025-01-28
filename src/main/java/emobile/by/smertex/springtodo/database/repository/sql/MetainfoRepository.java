@@ -1,9 +1,11 @@
 package emobile.by.smertex.springtodo.database.repository.sql;
 
 import emobile.by.smertex.springtodo.database.entity.sql.realisation.Metainfo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface MetainfoRepository {
-    Metainfo save(Metainfo metainfo);
+import java.util.UUID;
 
-    Metainfo update(Metainfo metainfo);
+@Repository
+public interface MetainfoRepository extends JpaRepository<Metainfo, UUID> {
 }

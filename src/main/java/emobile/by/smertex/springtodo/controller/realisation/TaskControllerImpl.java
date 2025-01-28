@@ -13,6 +13,7 @@ import emobile.by.smertex.springtodo.service.interfaces.TaskService;
 import emobile.by.smertex.springtodo.util.ApiPath;
 import emobile.by.smertex.springtodo.util.ResponseMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -32,8 +33,9 @@ public class TaskControllerImpl implements TaskController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<ReadTaskDto> findAll(@RequestBody @Validated TaskRequest request){
-        return taskService.findAllByFilter(request.taskFilter(), request.pageable());
+    public List<ReadTaskDto> findAll(@RequestBody @Validated TaskRequest request,
+                                     Pageable pageable){
+        return taskService.findAllByFilter(request.taskFilter(), pageable);
     }
 
     @PostMapping
@@ -55,8 +57,9 @@ public class TaskControllerImpl implements TaskController {
 
     @GetMapping(ApiPath.COMMENT_IN_TASK_PATH)
     public List<ReadCommentDto> findAllComment(@PathVariable UUID id,
-                                               @Validated @RequestBody CommentRequest commentRequest){
-        return commentService.findAllByFilter(id, commentRequest.commentFilter(), commentRequest.pageable());
+                                               @Validated @RequestBody CommentRequest commentRequest,
+                                               Pageable pageable){
+        return commentService.findAllByFilter(id, commentRequest.commentFilter(), pageable);
     }
 
     @PostMapping(ApiPath.COMMENT_IN_TASK_PATH)
