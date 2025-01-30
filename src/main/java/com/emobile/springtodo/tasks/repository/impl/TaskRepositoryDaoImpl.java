@@ -3,10 +3,12 @@ package com.emobile.springtodo.tasks.repository.impl;
 import com.emobile.springtodo.tasks.model.Task;
 import com.emobile.springtodo.tasks.repository.TaskRepositoryDao;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import static com.emobile.springtodo.tasks.repository.impl.HibernateSessionFactory.getSessionFactory;
+import static com.emobile.springtodo.tasks.repository.impl.HibernateSessionFactory.sessionFactory;
 
 @Slf4j
 @Repository
@@ -15,23 +17,20 @@ public class TaskRepositoryDaoImpl implements TaskRepositoryDao {
     @Override
     public List<Task> getListOfAllTasks(Integer from, Integer size) {
 
-        return (List<Task>) getSessionFactory().openSession()
-                .createQuery("From Task")
-                .list();
+        try (Session session = sessionFactory.openSession()) {
+            Query<Task> query = session.createQuery("from Task", Task.class);
+            return query.list();
+        }
     }
 
     @Override
     public Task getTaskByAuthorIdAndTaskId(Long authorId, Long taskId) {
 
-        var session = getSessionFactory().openSession();
-        var transaction = session.beginTransaction();
+        try (Session session = sessionFactory.openSession()) {
 
         Query<Task> query = session.createQuery("from Task where author_id = :authorId");
-        Task result = query.uniqueResult();
-        transaction.commit();
-        session.close();
-
-        return result;
+        return query.uniqueResult();
+        }
     }
 
     @Override
