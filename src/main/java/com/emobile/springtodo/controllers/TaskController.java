@@ -1,7 +1,9 @@
 package com.emobile.springtodo.controllers;
 
 import com.emobile.springtodo.dto.TaskDto;
+import com.emobile.springtodo.exceptions.DataCalendarNotBeNullException;
 import com.emobile.springtodo.exceptions.EntityNotFoundException;
+import com.emobile.springtodo.exceptions.StatusTaskNotBeNullException;
 import com.emobile.springtodo.services.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -59,7 +61,7 @@ public class TaskController {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Пример тела запроса для создания задачи", content = @Content(mediaType = "application/json", examples = @ExampleObject(name = "Создание задачи", value = "\"{\\n  \\\"id\\\": 1,\\n  \\\"title\\\": \\\"Тестовая задача\\\",\\n  \\\"description\\\": \\\"Тестовое описание задачи\\\",\\n  \\\"status\\\": true,\\n  \\\"dateCalendar\\\": \\\"2020-01-01T00:01:10\\\"\\n}\"")))
     @PostMapping(value = "/task/create")
     public ResponseEntity<TaskDto> createTask(@Valid @RequestBody @NotNull(message = "Объект не может быть null")
-                                              TaskDto tasksDto) {
+                                                  TaskDto tasksDto) throws DataCalendarNotBeNullException, StatusTaskNotBeNullException {
         log.info("Создание задачи, POST ");
         TaskDto localTasksDto = taskService.createTasks(tasksDto);
         if (localTasksDto != null) {
@@ -81,9 +83,10 @@ public class TaskController {
             @ApiResponse(responseCode = "200", description = "Возвращены задачи по заголовку", content = @Content(examples = @ExampleObject(value = "\"{\\n  \\\"id\\\": 1,\\n  \\\"title\\\": \\\"Тестовая задача\\\",\\n  \\\"description\\\": \\\"Тестовое описание задачи\\\",\\n  \\\"status\\\": true,\\n  \\\"dateCalendar\\\": \\\"2020-01-01T00:01:10\\\"\\n}\""))),
             @ApiResponse(responseCode = "400", description = "Не удалось получить задачи по заголовку", content = @Content)
     })
-    @GetMapping(value = "/task/gen-info/executor/{executorEmail}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/task/list/{title}", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<List<TaskDto>> getTasksByTitle(
-            @PathVariable("executorEmail") @Parameter(description = "Заголовок задачи") @NotBlank(message = "Заголовок задачи не может быть пустым") String taskTitle,
+            @PathVariable("title") @Parameter(description = "Заголовок задачи") @NotBlank(message = "Заголовок задачи не может быть пустым")
+            String taskTitle,
             @RequestParam(value = "offset", defaultValue = "0") @Min(0) @Parameter(description = "Номер страницы", example = "0") @NotNull(message = "Страница не может быть пустой")
             Integer offset,
             @RequestParam(value = "limit", defaultValue = "10") @Min(10) @Parameter(description = "Количество сущностей на странице",
@@ -129,14 +132,17 @@ public class TaskController {
      */
     @Operation(summary = "Удалить задачу")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Задача успешно отредактирована", content = @Content(examples = @ExampleObject(value = "{\nСущность была удалена\n}"))),
+            @ApiResponse(responseCode = "200", description = "Задача успешно отредактирована", content = @Content(examples = @ExampleObject(value = "{ \"message\": \"Сущность была удалена\" }"))),
             @ApiResponse(responseCode = "400", description = "Не удалось произвести удаление задачи", content = @Content)
     })
-    @DeleteMapping(value = "/task/delete/{id}", consumes = MediaType.ALL_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    @DeleteMapping(value = "/task/delete/{id}", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<String> deleteTasks(@PathVariable("id") @Parameter(description = "ID задачи") @NotNull(message = "ID задачи не может быть null")
                                               Long idTasks) {
         log.info("Удаление задачи по id, метод DELETE" + idTasks);
-        taskService.deleteTasks(idTasks);
-        return ResponseEntity.ok(IS_DELETE);
+        boolean result = taskService.deleteTasks(idTasks);
+        if (result) {
+            return ResponseEntity.ok(IS_DELETE);
+        }
+        return ResponseEntity.noContent().build();
     }
 }

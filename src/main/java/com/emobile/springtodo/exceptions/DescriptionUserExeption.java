@@ -9,7 +9,11 @@ public enum DescriptionUserExeption {
 
     GENERATION_ERROR("Возникла ошибка в системе: "),
 
-    TASK_NOT_FOUND_BY_ID("Задача по переданному ID не найдена");
+    TASK_NOT_FOUND_BY_ID("Задача по переданному ID не найдена"),
+
+    STATUS_NOT_BE_NULL("Статус задачи не может быть пуст"),
+
+    DATE_CALENDAR_NOT_BE_NULL("Дата задачи в календаре не может быть пустой");
 
     private String enumDescription;
 

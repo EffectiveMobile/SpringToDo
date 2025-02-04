@@ -1,7 +1,9 @@
 package com.emobile.springtodo.services;
 
 import com.emobile.springtodo.dto.TaskDto;
+import com.emobile.springtodo.exceptions.DataCalendarNotBeNullException;
 import com.emobile.springtodo.exceptions.EntityNotFoundException;
+import com.emobile.springtodo.exceptions.StatusTaskNotBeNullException;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +19,9 @@ public interface TaskService {
      * Метод для создания задачи
      *
      * @param tasksDto DTO объекта задачи, содержащий данные для создания
-     * @return Созданный объект-задача в виде {@link }
+     * @return Созданный объект-задача в виде {@link TaskDto}
      */
-    TaskDto createTasks(TaskDto tasksDto);
+    TaskDto createTasks(TaskDto tasksDto) throws StatusTaskNotBeNullException, DataCalendarNotBeNullException;
 
     /**
      * Метод для редактирования задачи
@@ -43,7 +45,8 @@ public interface TaskService {
      * Метод для удаления задачи
      *
      * @param idTasks ID задачи, которую нужно удалить
+     * @return true - если задача найдена и удалена успешно
      */
-    void deleteTasks(Long idTasks);
+    boolean deleteTasks(Long idTasks);
 
 }

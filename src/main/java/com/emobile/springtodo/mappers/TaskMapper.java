@@ -13,7 +13,7 @@ import java.util.List;
 public interface TaskMapper {
 
     /**
-     * Метод, конвертирующий {@link } в {@link }
+     * Метод, конвертирующий {@link TaskDto} в {@link Task}
      *
      * @param tasksDto DTO объекта задачи
      * @return Сконвертированный объект задачи
@@ -21,7 +21,7 @@ public interface TaskMapper {
     Task convertDtoToTasks(TaskDto tasksDto);
 
     /**
-     * Метод, конвертирующий {@link } в {@link }
+     * Метод, конвертирующий {@link Task} в {@link TaskDto}
      *
      * @param tasks Сущность задачи из базы данных
      * @return Сконвертированный DTO объекта задачи

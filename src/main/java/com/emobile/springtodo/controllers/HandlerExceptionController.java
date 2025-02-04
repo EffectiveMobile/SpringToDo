@@ -1,9 +1,7 @@
 package com.emobile.springtodo.controllers;
 
 
-import com.emobile.springtodo.exceptions.ApiErrorResponse;
-import com.emobile.springtodo.exceptions.EntityNotFoundException;
-import com.emobile.springtodo.exceptions.Violation;
+import com.emobile.springtodo.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -49,6 +47,34 @@ public class HandlerExceptionController {
         );
 
         return new ResponseEntity<>(apiErrorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataCalendarNotBeNullException.class)
+    protected ResponseEntity<ApiErrorResponse> handleExecutorNotFoundExeption(DataCalendarNotBeNullException e, HttpServletRequest request) {
+        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED + e);
+
+        ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
+                HttpStatus.NOT_ACCEPTABLE,
+                e.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(StatusTaskNotBeNullException.class)
+    protected ResponseEntity<ApiErrorResponse> handleExecutorNotFoundExeption(StatusTaskNotBeNullException e, HttpServletRequest request) {
+        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED + e);
+
+        ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
+                HttpStatus.NOT_ACCEPTABLE,
+                e.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**

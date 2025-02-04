@@ -1,6 +1,7 @@
 package com.emobile.springtodo.repositories;
 
 import com.emobile.springtodo.entities.Task;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import static com.emobile.springtodo.other.ConstantsClass.*;
 
+@Slf4j
 @Repository
 public class TaskRepositoryImpl implements TaskRepository {
 
@@ -27,8 +29,18 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        String sql = "SELECT COUNT(*) FROM tasks_entity WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        if (count != null) {
+            return count > 0;
+        }
+        return false;
+    }
+
+    @Override
     public Task save(Task entity) {
-        String sql = "INSERT INTO tasks_entity (title, description, status, dateCalendar) " +
+        String sql = "INSERT INTO tasks_entity (title, description, status, date_calendar) " +
                 "VALUES (?, ?, ?, ?)";
         commonUpdate(sql, entity);
         return entity;
@@ -36,29 +48,30 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task update(Task newEntity) {
-        String sql = "UPDATE tasks_entity SET title = ?, description = ?, status = ?, dateCalendar = ? WHERE id = ? ";
+        String sql = "UPDATE tasks_entity SET title = ?, description = ?, status = ?, date_calendar = ? WHERE id = ? ";
         commonUpdate(sql, newEntity);
         return newEntity;
     }
 
     @Override
     public Task findById(Long id) {
-        String sql = "SELECT id, title, description, status, dateCalendar " +
+        String sql = "SELECT id, title, description, status, date_calendar " +
                 "FROM tasks_entity WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper(), id);
     }
 
     @Override
     public Optional<List<Task>> findAllByTitle(String title, Integer offset, Integer limit) {
-        String sql = "SELECT id, title, description, status, dateCalendar " +
-                "FROM tasks_entity WHERE title = ? ORDER BY id LIMIT ? OFFSET ?";
-        return Optional.of(jdbcTemplate.query(sql, rowMapper(), title, offset, limit));
+        String sql = "SELECT id, title, description, status, date_calendar " +
+                "FROM tasks_entity WHERE title LIKE ? ORDER BY id LIMIT ? OFFSET ?";
+        return Optional.of(jdbcTemplate.query(sql, rowMapper(), title, limit, offset));
     }
 
     @Override
     public void deleteById(Long id) {
         String sql = "DELETE FROM tasks_entity WHERE id = ?";
         jdbcTemplate.update(sql, id);
+        log.info("DEL method");
     }
 
     private RowMapper<Task> rowMapper() {

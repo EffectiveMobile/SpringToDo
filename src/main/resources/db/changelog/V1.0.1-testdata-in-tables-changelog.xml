@@ -8,14 +8,14 @@
             <column name="title" value="Liquibase миграции"/>
             <column name="description" value="Сделать Liquibase миграции"/>
             <column name="status" valueBoolean="false"/>
-            <column name="dateCalendar" valueDate="2025-02-04T12:00:00"/>
+            <column name="date_calendar" valueDate="2025-02-04T12:00:00"/>
         </insert>
 
         <insert tableName="tasks_entity">
             <column name="title" value="Unit-тесты"/>
             <column name="description" value="Написать Unit-тесты"/>
             <column name="status" valueBoolean="false"/>
-            <column name="dateCalendar" valueDate="2025-02-05T10:00:00"/>
+            <column name="date_calendar" valueDate="2025-02-05T10:00:00"/>
         </insert>
     </changeSet>
 

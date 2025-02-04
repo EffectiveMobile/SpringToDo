@@ -18,7 +18,7 @@
             <column name="status" type="boolean">
                 <constraints nullable="false"/>
             </column>
-            <column name="dateCalendar" type="timestamp">
+            <column name="date_calendar" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>
