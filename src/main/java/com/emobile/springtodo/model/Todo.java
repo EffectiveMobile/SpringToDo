@@ -1,14 +1,12 @@
 package com.emobile.springtodo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Todo {
     private Long id;
     private String title;

@@ -6,10 +6,14 @@ import com.emobile.springtodo.repository.contract.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -31,19 +35,36 @@ public class TodoRepositoryImpl implements TodoRepository {
     @Override
     public Todo findById(Long id) {
         String sql = "SELECT * FROM todos WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new TodoRowMapper(), id);
+        List<Todo> results = jdbcTemplate.query(sql, new TodoRowMapper(), id);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
     }
 
     @Override
-    public void save(Todo todo) {
+    public Todo save(Todo todo) {
         String sql = "INSERT INTO todos (title, description, status) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, todo.getTitle(), todo.getDescription(), todo.getStatus().name());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, todo.getTitle());
+            ps.setString(2, todo.getDescription());
+            ps.setString(3, todo.getStatus().name());
+            return ps;
+        }, keyHolder);
+
+        Long generatedId = keyHolder.getKey().longValue();
+        todo.setId(generatedId);
+        return todo;
     }
 
     @Override
-    public void update(Todo todo) {
+    public Todo update(Todo todo) {
         String sql = "UPDATE todos SET title = ?, description = ?, status = ? WHERE id = ?";
         jdbcTemplate.update(sql, todo.getTitle(), todo.getDescription(), todo.getStatus().name(), todo.getId());
+        return findById(todo.getId());
     }
 
     @Override
