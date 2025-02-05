@@ -73,10 +73,10 @@ public class TaskServicesImpl implements TaskService {
     public Optional<List<TaskDto>> getTasksByTitle(String taskTitle, Integer offset, Integer limit) {
         StringBuffer localStringBuffer = new StringBuffer(taskTitle);
         char[] chars = taskTitle.toCharArray();
-        if (chars[ZERO] == PERCENT_CHAR_PRIMITIVE) {
+        if (chars[ZERO] != PERCENT_CHAR_PRIMITIVE) {
             localStringBuffer.insert(ZERO, PERCENT);
         }
-        if (chars[chars.length - ONE] == PERCENT_CHAR_PRIMITIVE) {
+        if (chars[chars.length - ONE] != PERCENT_CHAR_PRIMITIVE) {
             localStringBuffer.append(PERCENT);
         }
         Optional<List<Task>> optionalTaskList = taskRepository.findAllByTitle(localStringBuffer.toString(), offset, limit);

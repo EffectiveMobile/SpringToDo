@@ -10,7 +10,7 @@ public class ConstantsClass {
     public static final char PERCENT_CHAR_PRIMITIVE = '%';
     public static final Integer ZERO = 0;
     public static final Integer ONE = 1;
-    public static final String IS_DELETE = "Сущность была удалена";
+    public static final String IS_DELETE = "Entity was deleted";
     public static final String ID_FIELD = "id";
     public static final String TITLE_FIELD = "title";
     public static final String DESCRIPTION_FIELD = "description";
