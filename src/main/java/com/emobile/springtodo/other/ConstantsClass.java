@@ -18,5 +18,6 @@ public class ConstantsClass {
     public static final String DATA_CALENDAR_FIELD = "date_calendar";
     public static final String LINE_FEED = "\n";
     public static final String PERCENT = "%";
+    public static final String LOGGER_SYNTAX = "{}{}\\n{}\\n{}";
 
 }

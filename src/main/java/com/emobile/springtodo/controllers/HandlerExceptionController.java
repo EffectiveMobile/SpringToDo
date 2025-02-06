@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.emobile.springtodo.exceptions.DescriptionUserExeption.GENERATION_ERROR;
-import static com.emobile.springtodo.other.ConstantsClass.LINE_FEED;
+import static com.emobile.springtodo.other.ConstantsClass.LOGGER_SYNTAX;
 
 /**
  * <pre>
@@ -37,7 +37,7 @@ public class HandlerExceptionController {
      */
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<ApiErrorResponse> handleExecutorNotFoundExeption(EntityNotFoundException e, HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED + e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.NOT_FOUND,
@@ -51,7 +51,7 @@ public class HandlerExceptionController {
 
     @ExceptionHandler(DataCalendarNotBeNullException.class)
     protected ResponseEntity<ApiErrorResponse> handleExecutorNotFoundExeption(DataCalendarNotBeNullException e, HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED + e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.NOT_ACCEPTABLE,
@@ -65,7 +65,7 @@ public class HandlerExceptionController {
 
     @ExceptionHandler(StatusTaskNotBeNullException.class)
     protected ResponseEntity<ApiErrorResponse> handleExecutorNotFoundExeption(StatusTaskNotBeNullException e, HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED + e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.NOT_ACCEPTABLE,
@@ -83,8 +83,7 @@ public class HandlerExceptionController {
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<ApiErrorResponse> handleConstraintViolationException(ConstraintViolationException e,
                                                                                   HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         Set<ConstraintViolation<?>> violationsSet = e.getConstraintViolations();
         List<Violation> violations = (violationsSet != null)
@@ -111,8 +110,7 @@ public class HandlerExceptionController {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         List<Violation> violations = e.getBindingResult().getFieldErrors().stream()
                 .map(error -> new Violation(error.getField(), error.getDefaultMessage()))
@@ -133,8 +131,7 @@ public class HandlerExceptionController {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.BAD_REQUEST,
@@ -151,8 +148,7 @@ public class HandlerExceptionController {
      */
     @ExceptionHandler(IllegalStateException.class)
     protected ResponseEntity<ApiErrorResponse> handleIllegalStateException(IllegalStateException e, HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -170,8 +166,7 @@ public class HandlerExceptionController {
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e,
                                                                                      HttpServletRequest request) {
-        log.error(GENERATION_ERROR.getEnumDescription() + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -188,8 +183,7 @@ public class HandlerExceptionController {
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ApiErrorResponse> handleAllExceptions(Exception e, HttpServletRequest request) {
-        log.error("Возникла непредвиденная ошибка " + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -203,8 +197,7 @@ public class HandlerExceptionController {
 
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<ApiErrorResponse> handleAllRunTimeException(RuntimeException e, HttpServletRequest request) {
-        log.error("Возникла непредвиденная ошибка " + e.getClass() + LINE_FEED + e.getMessage() + LINE_FEED +
-                e);
+        log.error(LOGGER_SYNTAX, GENERATION_ERROR.getEnumDescription(), e.getClass(), e.getMessage(), e);
 
         ApiErrorResponse apiErrorResponse = buildApiErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
