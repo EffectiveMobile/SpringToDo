@@ -95,10 +95,7 @@ public class TaskController {
         log.info("Получение задачи по исполнителю, метод GET " + taskTitle);
         Optional<List<TaskDto>> optionalExecutorTasksDtoList = taskService
                 .getTasksByTitle(taskTitle, offset, limit);
-        if (optionalExecutorTasksDtoList.isPresent()) {
-            return ResponseEntity.ok(optionalExecutorTasksDtoList.get());
-        }
-        return ResponseEntity.badRequest().build();
+        return optionalExecutorTasksDtoList.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     /**
@@ -118,10 +115,7 @@ public class TaskController {
                                              @NotNull(message = "TasksDto не может быть null") TaskDto tasksDto) throws EntityNotFoundException {
         Optional<TaskDto> newTasksDto = taskService
                 .changeTasks(tasksDto);
-        if (newTasksDto.isPresent()) {
-            return ResponseEntity.ok(newTasksDto.get());
-        }
-        return ResponseEntity.badRequest().build();
+        return newTasksDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     /**
