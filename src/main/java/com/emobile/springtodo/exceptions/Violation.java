@@ -1,13 +1,3 @@
 package com.emobile.springtodo.exceptions;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class Violation {
-
-    private final String fieldName;
-    private final String message;
-
-}
+public record Violation(String fieldName, String message) {}

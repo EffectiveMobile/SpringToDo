@@ -1,4 +1,3 @@
-// TaskControllerIntegrationTest.java
 package com.emobile.springtodo.controllers;
 
 import com.emobile.springtodo.dto.TaskDto;
@@ -35,8 +34,6 @@ class TaskControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Тесты для POST /task/create
-
     @DisplayName("Проверка POST /task/create, при валидном запросе")
     @Test
     void createTask_ValidRequest_ReturnsCreatedTask() throws Exception {
@@ -63,7 +60,6 @@ class TaskControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // Тесты для GET /task/list/{title}
     @DisplayName("Проверка GET /task/list/{title}, при валидном запросе")
     @Test
     void getTasksByTitle_ExistingTitle_ReturnsTasks() throws Exception {
@@ -85,7 +81,6 @@ class TaskControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // Тесты для PUT /task/update-tasks
     @DisplayName("Проверка GET /task/list/{title}, при валидном запросе")
     @Test
     void updateTask_ValidRequest_ReturnsUpdatedTask() throws Exception {
@@ -113,7 +108,6 @@ class TaskControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // Тесты для DELETE /task/delete/{id}
     @DisplayName("Проверка DELETE /task/delete/{id}, при валидном запросе")
     @Test
     void deleteTask_ExistingId_ReturnsSuccess() throws Exception {
