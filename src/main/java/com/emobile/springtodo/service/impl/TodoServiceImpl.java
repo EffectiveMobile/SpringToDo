@@ -10,7 +10,9 @@ import com.emobile.springtodo.repository.contract.TodoRepository;
 import com.emobile.springtodo.service.contract.TodoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @Cacheable(value = "todos", key = "#id")
     public Todo getTodoById(Long id) {
-        log.info("No data in cache, going to DB...");
+        log.info("No data in cache for todo with id {}, going to DB...", id);
         Todo todo = todoRepository.findById(id);
         if (todo == null) {
             throw new TodoNotFoundException(id);
@@ -45,6 +47,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @CacheEvict(value = "todos", key = "'all-' + #limit + '-' + #offset", allEntries = true)
     public Todo saveTodo(CreateTodo createTodo) {
         if (createTodo.title() == null || createTodo.title().trim().isEmpty()) {
             throw new InvalidDataException("Title cannot be empty or null");
@@ -57,6 +60,12 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "todos", key = "#id"),
+                    @CacheEvict(value = "todos", key = "'all-' + #limit + '-' + #offset", allEntries = true)
+            }
+    )
     public Todo updateTodo(Long id, UpdateTodo updateTodo) {
         Todo existingTodo = todoRepository.findById(id);
         if (existingTodo == null) {
@@ -79,7 +88,16 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "todos", key = "#id"),
+                    @CacheEvict(value = "todos", key = "'all-' + #limit + '-' + #offset", allEntries = true)
+            }
+    )
     public void deleteTodo(Long id) {
+        if (todoRepository.findById(id) == null){
+            throw new TodoNotFoundException(id);
+        }
         todoRepository.delete(id);
     }
 }

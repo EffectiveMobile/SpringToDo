@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TodoNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleTodoNotFoundException(TodoNotFoundException ex) {
         return new ResponseEntity<>(
-                new ErrorResponse(
+                new ErrorResponse(404,
                         HttpStatus.NOT_FOUND,
                         ex.getMessage(),
                         Instant.now()),
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         }
 
         return new ResponseEntity<>(
-                new ErrorResponse(
+                new ErrorResponse(400,
                         HttpStatus.BAD_REQUEST,
                         message,
                         Instant.now()),
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDataException(InvalidDataException ex) {
         return new ResponseEntity<>(
-                new ErrorResponse(
+                new ErrorResponse(400,
                         HttpStatus.BAD_REQUEST,
                         ex.getMessage(),
                         Instant.now()),
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         return new ResponseEntity<>(
-                new ErrorResponse(
+                new ErrorResponse(500,
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         "An unexpected error occurred: " + ex.toString() + " " + ex.getMessage() + " " + Arrays.toString(ex.getStackTrace()),
                         Instant.now()),
