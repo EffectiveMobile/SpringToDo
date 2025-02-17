@@ -95,7 +95,7 @@ public class TodoServiceImpl implements TodoService {
             }
     )
     public void deleteTodo(Long id) {
-        if (todoRepository.findById(id) == null){
+        if (todoRepository.findById(id) == null) {
             throw new TodoNotFoundException(id);
         }
         todoRepository.delete(id);

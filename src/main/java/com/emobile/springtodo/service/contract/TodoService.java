@@ -50,7 +50,7 @@ public interface TodoService {
      * @param updatedTodo DTO с обновленными данными задачи
      * @return обновленная задача
      * @throws TodoNotFoundException если задача не найдена
-     * @throws InvalidDataException если данные для обновления задачи недопустимы
+     * @throws InvalidDataException  если данные для обновления задачи недопустимы
      */
     Todo updateTodo(Long id, UpdateTodo updatedTodo);
 

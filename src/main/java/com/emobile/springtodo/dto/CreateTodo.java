@@ -8,7 +8,7 @@ import com.emobile.springtodo.model.TodoStatus;
  *
  * @author Мельников Никита
  */
-public record CreateTodo (String title,
-                          String description,
-                          TodoStatus status) {
+public record CreateTodo(String title,
+                         String description,
+                         TodoStatus status) {
 }

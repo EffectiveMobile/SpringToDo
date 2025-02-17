@@ -46,7 +46,7 @@ class TodoRepositoryTest extends AbstractTestcontainers {
         Todo todo = new Todo(null, "Task 1", "Description 1", TodoStatus.TO_DO);
 
         Todo savedTodo = todoRepository.save(todo);
-        
+
         assertNotNull(savedTodo.getId());
         assertEquals("Task 1", savedTodo.getTitle());
     }
