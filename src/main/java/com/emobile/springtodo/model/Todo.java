@@ -4,6 +4,12 @@ import lombok.*;
 
 import java.io.Serializable;
 
+/**
+ * Модель задачи.
+ *
+ * @author Мельников Никита
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

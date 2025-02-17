@@ -11,10 +11,23 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
+/**
+ * Конфигурация Redis для кэширования данных.
+ * Этот класс настраивает RedisTemplate и RedisCacheConfiguration для работы с Redis.
+ *
+ * @author Мельников Никита
+ */
 @Configuration
 @EnableCaching
 public class RedisConfig {
 
+    /**
+     * Настройка RedisTemplate для сериализации ключей и значений.
+     * Используется JSON-сериализация для значений и строковая сериализация для ключей.
+     *
+     * @param connectionFactory фабрика подключения к Redis
+     * @return настроенный RedisTemplate
+     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -29,6 +42,12 @@ public class RedisConfig {
         return template;
     }
 
+    /**
+     * Настройка конфигурации кэша Redis.
+     * Устанавливается время жизни записей в кэше (TTL) и отключается кэширование null-значений.
+     *
+     * @return настроенная конфигурация RedisCacheConfiguration
+     */
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()

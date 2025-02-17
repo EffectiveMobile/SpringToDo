@@ -4,5 +4,14 @@ import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
 
-public record ErrorResponse(int code,HttpStatus status, String message, Instant timestamp) {
+/**
+ * DTO для представления ошибки в ответе API.
+ * Используется для возврата информации об ошибках клиенту.
+ *
+ * @author Мельников Никита
+ */
+public record ErrorResponse(int code,
+                            HttpStatus status,
+                            String message,
+                            Instant timestamp) {
 }

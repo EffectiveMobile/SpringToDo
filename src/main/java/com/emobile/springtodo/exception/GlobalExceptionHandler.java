@@ -12,9 +12,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.Arrays;
 
+/**
+ * Глобальный обработчик исключений.
+ * Обрабатывает все исключения, возникающие в приложении,
+ * и возвращает клиенту соответствующие HTTP-ответы.
+ *
+ * @author Мельников Никита
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Обрабатывает исключение {@link TodoNotFoundException}.
+     * Возвращает HTTP 404 (Not Found) с информацией об ошибке.
+     *
+     * @param ex исключение, связанное с отсутствием задачи
+     * @return HTTP-ответ с кодом 404 и описанием ошибки
+     */
     @ExceptionHandler(TodoNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleTodoNotFoundException(TodoNotFoundException ex) {
         return new ResponseEntity<>(
@@ -25,6 +39,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Обрабатывает исключение {@link HttpMessageNotReadableException}.
+     * Возвращает HTTP 400 (Bad Request) с информацией об ошибке.
+     *
+     * @param ex исключение, связанное с ошибками парсинга JSON
+     * @return HTTP-ответ с кодом 400 и описанием ошибки
+     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         String message = "Invalid request body or parameters. Please check your input.";
@@ -45,6 +66,13 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Обрабатывает исключение {@link InvalidDataException}.
+     * Возвращает HTTP 400 (Bad Request) с информацией об ошибке.
+     *
+     * @param ex исключение, связанное с недопустимыми данными
+     * @return HTTP-ответ с кодом 400 и описанием ошибки
+     */
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDataException(InvalidDataException ex) {
         return new ResponseEntity<>(
@@ -55,12 +83,22 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Обрабатывает любые другие исключения.
+     * Возвращает HTTP 500 (Internal Server Error) с информацией об ошибке.
+     *
+     * @param ex произвольное исключение
+     * @return HTTP-ответ с кодом 500 и описанием ошибки
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         return new ResponseEntity<>(
                 new ErrorResponse(500,
                         HttpStatus.INTERNAL_SERVER_ERROR,
-                        "An unexpected error occurred: " + ex.toString() + " " + ex.getMessage() + " " + Arrays.toString(ex.getStackTrace()),
+                        "An unexpected error occurred: "
+                                + ex.toString() + " "
+                                + ex.getMessage() + " "
+                                + Arrays.toString(ex.getStackTrace()),
                         Instant.now()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
