@@ -5,6 +5,8 @@ import com.emobile.springtodo.entity.ToDoItem;
 
 /**
  * Интерфейс для маппинга между сущностью ToDoItem и DTO ToDoItemDto.
+ *
+ * @author PavelOkhrimchuk
  */
 public interface ToDoItemMapper {
 

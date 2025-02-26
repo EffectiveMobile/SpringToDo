@@ -16,6 +16,8 @@ import java.util.List;
 /**
  * Контроллер для работы с задачами ToDo.
  * Предоставляет API для получения, создания, обновления и удаления задач.
+ *
+ * @author PavelOkhrimchuk
  */
 @RestController
 @RequestMapping("/api/todos")

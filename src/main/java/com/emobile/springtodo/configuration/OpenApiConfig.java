@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Конфигурация OpenAPI для документации API.
  * Настроена информация о версии и описании API.
+ *
+ * @author PavelOkhrimchuk
  */
 @Configuration
 public class OpenApiConfig {

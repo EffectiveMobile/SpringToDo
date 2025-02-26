@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 /**
  * Реализация сервиса для управления задачами ToDo.
  * Включает методы для получения задач, создания, обновления и удаления задач с логированием.
+ *
+ * @author PavelOkhrimchuk
  */
 @Slf4j
 @Service

@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 /**
  * Тесты для репозитория ToDo.
  * Включает тестирование операций сохранения, обновления и удаления задач.
+ *
+ * @author PavelOkhrimchuk
  */
 @ExtendWith(MockitoExtension.class)
 class ToDoRepositoryTest {

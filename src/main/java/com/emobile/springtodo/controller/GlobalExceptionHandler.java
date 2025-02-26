@@ -20,6 +20,8 @@ import java.util.Map;
  * Глобальный обработчик исключений для всего приложения.
  * Обрабатывает различные исключения, такие как ToDoNotFoundException и InvalidToDoException,
  * а также ошибки валидации.
+ *
+ * @author PavelOkhrimchuk
  */
 @Slf4j
 @RestControllerAdvice

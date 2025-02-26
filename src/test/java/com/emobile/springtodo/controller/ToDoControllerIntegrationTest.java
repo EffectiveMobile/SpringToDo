@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Интеграционные тесты для контроллера ToDo.
  * Проверяются основные операции с задачами (создание, получение).
+ *
+ * @author PavelOkhrimchuk
  */
 @ExtendWith(SpringExtension.class)
 @Import(ToDoServiceImpl.class)

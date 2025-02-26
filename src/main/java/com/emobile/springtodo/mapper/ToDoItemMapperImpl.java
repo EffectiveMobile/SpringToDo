@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 /**
  * Реализация маппера для преобразования сущности ToDoItem в DTO и наоборот.
+ *
+ * @author PavelOkhrimchuk
  */
 @Component
 public class ToDoItemMapperImpl implements ToDoItemMapper {

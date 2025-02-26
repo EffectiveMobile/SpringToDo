@@ -2,6 +2,8 @@ package com.emobile.springtodo.exception;
 
 /**
  * Исключение, которое выбрасывается, если задача ToDo не найдена по ID.
+ *
+ * @author PavelOkhrimchuk
  */
 public class ToDoNotFoundException extends RuntimeException {
 

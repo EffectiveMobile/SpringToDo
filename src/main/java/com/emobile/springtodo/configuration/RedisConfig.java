@@ -11,6 +11,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 /**
  * Конфигурация Redis кеширования.
  * Включает создание и настройку CacheManager для работы с Redis в приложении.
+ *
+ * @author PavelOkhrimchuk
  */
 @Configuration
 @EnableCaching

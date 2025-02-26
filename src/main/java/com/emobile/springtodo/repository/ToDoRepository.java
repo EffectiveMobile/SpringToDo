@@ -8,6 +8,8 @@ import java.util.Optional;
 /**
  * Репозиторий для работы с задачами ToDo.
  * Содержит методы для поиска, сохранения, обновления и удаления задач.
+ *
+ * @author PavelOkhrimchuk
  */
 public interface ToDoRepository {
 

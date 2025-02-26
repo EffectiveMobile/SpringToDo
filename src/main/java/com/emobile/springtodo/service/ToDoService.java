@@ -7,6 +7,8 @@ import java.util.List;
 /**
  * Сервис для управления задачами ToDo.
  * Содержит методы для получения, создания, обновления и удаления задач.
+ *
+ * @author PavelOkhrimchuk
  */
 public interface ToDoService {
 

@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Главный класс приложения Spring Boot для ToDo.
  * Запускает приложение.
+ *
+ * @author PavelOkhrimchuk
  */
 @SpringBootApplication
 public class SpringToDoApplication {

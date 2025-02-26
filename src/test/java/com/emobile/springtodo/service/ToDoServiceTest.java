@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 /**
  * Тесты для сервиса ToDo.
  * Включает тестирование всех CRUD операций (получение, создание, обновление, удаление).
+ *
+ * @author PavelOkhrimchuk
  */
 @ExtendWith(MockitoExtension.class)
 class ToDoServiceTest {

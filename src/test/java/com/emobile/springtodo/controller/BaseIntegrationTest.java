@@ -11,6 +11,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 /**
  * Базовый класс для интеграционных тестов.
  * Настроены контейнеры для PostgreSQL и Redis.
+ *
+ * @author PavelOkhrimchuk
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationTest {

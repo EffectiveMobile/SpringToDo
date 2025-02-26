@@ -10,6 +10,8 @@ import java.io.Serializable;
 /**
  * DTO для задачи (ToDoItem).
  * Содержит поля задачи и использует аннотации для валидации данных.
+ *
+ * @author PavelOkhrimchuk
  */
 @Getter
 @Setter

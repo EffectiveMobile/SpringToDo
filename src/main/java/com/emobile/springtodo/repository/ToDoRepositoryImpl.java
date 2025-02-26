@@ -12,6 +12,8 @@ import java.util.Optional;
 /**
  * Реализация репозитория для работы с задачами ToDo с использованием JdbcTemplate.
  * Реализует методы поиска, сохранения, обновления и удаления задач в базе данных.
+ *
+ * @author PavelOkhrimchuk
  */
 @Repository
 @RequiredArgsConstructor
