@@ -3,9 +3,9 @@ package com.emobile.springtodo.controller;
 import com.emobile.springtodo.dto.ToDoItemDto;
 import com.emobile.springtodo.service.ToDoService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Контроллер для работы с задачами ToDo.
+ * Предоставляет API для получения, создания, обновления и удаления задач.
+ */
 @RestController
 @RequestMapping("/api/todos")
 @RequiredArgsConstructor
@@ -21,6 +25,13 @@ public class ToDoController {
 
     private final ToDoService toDoService;
 
+    /**
+     * Получить все задачи с возможностью пагинации.
+     *
+     * @param limit  Количество задач для выборки.
+     * @param offset Смещение для выборки.
+     * @return Список задач.
+     */
     @GetMapping
     @Operation(summary = "Получить все задачи", description = "Получает список всех задач с возможностью пагинации")
     @ApiResponses(value = {
@@ -32,6 +43,11 @@ public class ToDoController {
         return toDoService.getAll(limit, offset);
     }
 
+    /**
+     * Получить задачу по уникальному идентификатору.
+     * @param id Идентификатор задачи.
+     * @return Задача с данным ID.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Получить задачу по ID", description = "Получает задачу по ее уникальному идентификатору")
     @ApiResponses(value = {
@@ -42,6 +58,11 @@ public class ToDoController {
         return toDoService.getById(id);
     }
 
+    /**
+     * Создать новую задачу.
+     * @param dto Данные задачи для создания.
+     * @return Созданная задача.
+     */
     @PostMapping
     @Operation(summary = "Создать новую задачу", description = "Создает новую задачу")
     @ApiResponses(value = {
@@ -52,6 +73,12 @@ public class ToDoController {
         return ResponseEntity.ok(toDoService.create(dto));
     }
 
+    /**
+     * Обновить задачу по ID.
+     * @param id Идентификатор задачи для обновления.
+     * @param dto Данные задачи для обновления.
+     * @return Обновленная задача.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Обновить задачу", description = "Обновляет существующую задачу по ее ID")
     @ApiResponses(value = {
@@ -62,6 +89,11 @@ public class ToDoController {
         return ResponseEntity.ok(toDoService.update(id, dto));
     }
 
+    /**
+     * Удалить задачу по ID.
+     * @param id Идентификатор задачи для удаления.
+     * @return Ответ без содержимого (204).
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить задачу", description = "Удаляет задачу по ее ID")
     @ApiResponses(value = {

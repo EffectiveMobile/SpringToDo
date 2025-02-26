@@ -16,9 +16,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тесты для сервиса ToDo.
+ * Включает тестирование всех CRUD операций (получение, создание, обновление, удаление).
+ */
 @ExtendWith(MockitoExtension.class)
 class ToDoServiceTest {
 

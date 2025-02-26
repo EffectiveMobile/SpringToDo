@@ -12,6 +12,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Интеграционные тесты для контроллера ToDo.
+ * Проверяются основные операции с задачами (создание, получение).
+ */
 @ExtendWith(SpringExtension.class)
 @Import(ToDoServiceImpl.class)
 class ToDoControllerIntegrationTest extends BaseIntegrationTest {

@@ -16,13 +16,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса для управления задачами ToDo.
+ * Включает методы для получения задач, создания, обновления и удаления задач с логированием.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ToDoServiceImpl implements ToDoService {
+
     private final ToDoRepository toDoRepository;
     private final ToDoItemMapper toDoItemMapper;
 
+    /**
+     * Получить все задачи с пагинацией.
+     *
+     * @param limit  Количество задач для выборки.
+     * @param offset Смещение для выборки.
+     * @return Список задач в виде DTO.
+     */
     @Override
     public List<ToDoItemDto> getAll(int limit, int offset) {
         log.info("Fetching ToDo items with limit={} and offset={}", limit, offset);
@@ -32,6 +44,11 @@ public class ToDoServiceImpl implements ToDoService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Получить задачу по ID с кешированием.
+     * @param id Идентификатор задачи.
+     * @return DTO задачи.
+     */
     @Cacheable(value = "todos", key = "#id")
     @Override
     public ToDoItemDto getById(Long id) {
@@ -44,6 +61,11 @@ public class ToDoServiceImpl implements ToDoService {
         return toDoItemMapper.toDto(item);
     }
 
+    /**
+     * Создание новой задачи.
+     * @param dto DTO задачи для создания.
+     * @return Созданная задача в виде DTO.
+     */
     @Transactional
     @Override
     public ToDoItemDto create(ToDoItemDto dto) {
@@ -53,6 +75,12 @@ public class ToDoServiceImpl implements ToDoService {
         return toDoItemMapper.toDto(entity);
     }
 
+    /**
+     * Обновление задачи по ID с кешированием.
+     * @param id Идентификатор задачи для обновления.
+     * @param dto DTO с новыми данными задачи.
+     * @return Обновленная задача в виде DTO.
+     */
     @Transactional
     @CachePut(value = "todos", key = "#id")
     @Override
@@ -72,6 +100,10 @@ public class ToDoServiceImpl implements ToDoService {
         return toDoItemMapper.toDto(item);
     }
 
+    /**
+     * Удаление задачи по ID с кешированием.
+     * @param id Идентификатор задачи для удаления.
+     */
     @Transactional
     @CacheEvict(value = "todos", key = "#id")
     @Override

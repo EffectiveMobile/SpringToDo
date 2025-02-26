@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тесты для репозитория ToDo.
+ * Включает тестирование операций сохранения, обновления и удаления задач.
+ */
 @ExtendWith(MockitoExtension.class)
 class ToDoRepositoryTest {
 
