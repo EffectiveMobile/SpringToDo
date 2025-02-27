@@ -1,0 +1,31 @@
+stages:
+  - test
+  - build
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+
+test:
+  stage: test
+  image: maven:3.8.6-jdk-17
+  script:
+    - mvn clean test
+  only:
+    - merge_requests
+    - dev
+
+build:
+  stage: build
+  image: maven:3.8.6-jdk-17
+  script:
+    - mvn clean package
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - merge_requests
+    - dev
