@@ -1,6 +1,9 @@
 package com.emobile.springtodo.repository.contract;
 
 import com.emobile.springtodo.model.Todo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,7 +12,8 @@ import java.util.List;
  *
  * @author Мельников Никита
  */
-public interface TodoRepository {
+@Repository
+public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     /**
      * Возвращает список задач с пагинацией.
@@ -18,36 +22,6 @@ public interface TodoRepository {
      * @param offset смещение для пагинации
      * @return список задач
      */
+    @Query(value = "SELECT * FROM todos ORDER BY id LIMIT :limit OFFSET :offset", nativeQuery = true)
     List<Todo> findAll(int limit, int offset);
-
-    /**
-     * Находит задачу по её уникальному идентификатору.
-     *
-     * @param id идентификатор задачи
-     * @return задача с указанным ID или null, если задача не найдена
-     */
-    Todo findById(Long id);
-
-    /**
-     * Сохраняет новую задачу в базе данных.
-     *
-     * @param todo задача для сохранения
-     * @return сохранённая задача с присвоенным ID
-     */
-    Todo save(Todo todo);
-
-    /**
-     * Обновляет существующую задачу в базе данных.
-     *
-     * @param todo задача с обновлёнными данными
-     * @return обновлённая задача
-     */
-    Todo update(Todo todo);
-
-    /**
-     * Удаляет задачу из базы данных по её уникальному идентификатору.
-     *
-     * @param id идентификатор задачи для удаления
-     */
-    void delete(Long id);
 }

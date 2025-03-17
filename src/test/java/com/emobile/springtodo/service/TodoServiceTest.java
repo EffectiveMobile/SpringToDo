@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -51,7 +52,7 @@ class TodoServiceTest {
     @Test
     void testGetTodoById() {
         Todo mockTodo = new Todo(1L, "Task 1", "Description 1", TodoStatus.TO_DO);
-        when(todoRepository.findById(1L)).thenReturn(mockTodo);
+        when(todoRepository.findById(1L)).thenReturn(Optional.of(mockTodo));
 
         Todo todo = todoService.getTodoById(1L);
 
@@ -62,7 +63,7 @@ class TodoServiceTest {
 
     @Test
     void testGetTodoByIdThrowsException() {
-        when(todoRepository.findById(1L)).thenReturn(null);
+        when(todoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(TodoNotFoundException.class, () -> todoService.getTodoById(1L));
         verify(todoRepository, times(1)).findById(1L);
@@ -96,8 +97,8 @@ class TodoServiceTest {
         UpdateTodo updateTodo = new UpdateTodo("Updated Task", "Updated Description", TodoStatus.COMPLETED);
         Todo existingTodo = new Todo(1L, "Task 1", "Description 1", TodoStatus.TO_DO);
 
-        when(todoRepository.findById(1L)).thenReturn(existingTodo);
-        when(todoRepository.update(any(Todo.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(todoRepository.findById(1L)).thenReturn(Optional.of(existingTodo));
+        when(todoRepository.save(any(Todo.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Todo updatedTodo = todoService.updateTodo(1L, updateTodo);
 
@@ -106,14 +107,14 @@ class TodoServiceTest {
         assertEquals(TodoStatus.COMPLETED, updatedTodo.getStatus());
 
         verify(todoRepository, times(1)).findById(1L);
-        verify(todoRepository, times(1)).update(any(Todo.class));
+        verify(todoRepository, times(1)).save(any(Todo.class));
     }
 
     @Test
     void testUpdateTodo_shouldThrowTodoNotFoundException() {
         UpdateTodo updateTodo = new UpdateTodo("Updated Task", "Updated Description", TodoStatus.COMPLETED);
 
-        when(todoRepository.findById(1L)).thenReturn(null);
+        when(todoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(TodoNotFoundException.class, () -> todoService.updateTodo(1L, updateTodo));
     }
@@ -123,7 +124,7 @@ class TodoServiceTest {
         UpdateTodo updateTodo = new UpdateTodo("", "Updated Description", TodoStatus.COMPLETED);
         Todo existingTodo = new Todo(1L, "Task 1", "Description 1", TodoStatus.TO_DO);
 
-        when(todoRepository.findById(1L)).thenReturn(existingTodo);
+        when(todoRepository.findById(1L)).thenReturn(Optional.of(existingTodo));
 
         assertThrows(InvalidDataException.class, () -> todoService.updateTodo(1L, updateTodo));
     }
@@ -131,18 +132,18 @@ class TodoServiceTest {
     @Test
     void testDeleteTodo() {
         Todo existingTodo = new Todo(1L, "Task 1", "Description 1", TodoStatus.TO_DO);
-        when(todoRepository.findById(1L)).thenReturn(existingTodo);
-        doNothing().when(todoRepository).delete(1L);
+        when(todoRepository.findById(1L)).thenReturn(Optional.of(existingTodo));
+        doNothing().when(todoRepository).delete(existingTodo);
 
         todoService.deleteTodo(1L);
 
         verify(todoRepository, times(1)).findById(1L);
-        verify(todoRepository, times(1)).delete(1L);
+        verify(todoRepository, times(1)).delete(existingTodo);
     }
 
     @Test
     void testDeleteTodo_shouldThrowTodoNotFoundException(){
-        when(todoRepository.findById(1L)).thenReturn(null);
+        when(todoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(TodoNotFoundException.class, () -> todoService.deleteTodo(1L));
     }

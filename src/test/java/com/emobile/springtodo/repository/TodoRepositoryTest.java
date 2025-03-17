@@ -3,39 +3,40 @@ package com.emobile.springtodo.repository;
 import com.emobile.springtodo.model.Todo;
 import com.emobile.springtodo.model.TodoStatus;
 import com.emobile.springtodo.repository.contract.TodoRepository;
-import com.emobile.springtodo.repository.impl.TodoRepositoryImpl;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class TodoRepositoryTest extends AbstractTestcontainers {
 
-    private final TodoRepository todoRepository;
-
-    public TodoRepositoryTest() {
-        this.todoRepository = new TodoRepositoryImpl(new JdbcTemplate(dataSource));
-    }
+    @Autowired
+    private TodoRepository todoRepository;
 
     @Test
-    void testFindAll() {
+    void testFindAllWithPagination() {
         todoRepository.save(new Todo(null, "Task 1", "Description 1", TodoStatus.TO_DO));
         todoRepository.save(new Todo(null, "Task 2", "Description 2", TodoStatus.IN_PROGRESS));
+        todoRepository.save(new Todo(null, "Task 3", "Description 3", TodoStatus.COMPLETED));
 
-        List<Todo> todos = todoRepository.findAll(10, 0);
+        List<Todo> todos = todoRepository.findAll(2, 1);
 
         assertEquals(2, todos.size());
-        assertEquals("Task 1", todos.get(0).getTitle());
-        assertEquals("Task 2", todos.get(1).getTitle());
+        assertEquals("Task 2", todos.get(0).getTitle());
+        assertEquals("Task 3", todos.get(1).getTitle());
     }
 
     @Test
     void testFindById() {
         Todo savedTodo = todoRepository.save(new Todo(null, "Task 1", "Description 1", TodoStatus.TO_DO));
 
-        Todo foundTodo = todoRepository.findById(savedTodo.getId());
+        Todo foundTodo = todoRepository.findById(savedTodo.getId()).orElse(null);
 
         assertNotNull(foundTodo);
         assertEquals("Task 1", foundTodo.getTitle());
@@ -54,10 +55,10 @@ class TodoRepositoryTest extends AbstractTestcontainers {
     @Test
     void testUpdate() {
         Todo savedTodo = todoRepository.save(new Todo(null, "Task 1", "Description 1", TodoStatus.TO_DO));
+
         savedTodo.setTitle("Updated Task");
         savedTodo.setStatus(TodoStatus.COMPLETED);
-
-        Todo updatedTodo = todoRepository.update(savedTodo);
+        Todo updatedTodo = todoRepository.save(savedTodo);
 
         assertNotNull(updatedTodo);
         assertEquals("Updated Task", updatedTodo.getTitle());
@@ -68,9 +69,9 @@ class TodoRepositoryTest extends AbstractTestcontainers {
     void testDelete() {
         Todo savedTodo = todoRepository.save(new Todo(null, "Task 1", "Description 1", TodoStatus.TO_DO));
 
-        todoRepository.delete(savedTodo.getId());
-        Todo deletedTodo = todoRepository.findById(savedTodo.getId());
+        todoRepository.deleteById(savedTodo.getId());
 
+        Todo deletedTodo = todoRepository.findById(savedTodo.getId()).orElse(null);
         assertNull(deletedTodo);
     }
 }

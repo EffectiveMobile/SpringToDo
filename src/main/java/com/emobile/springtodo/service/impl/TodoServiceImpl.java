@@ -39,11 +39,7 @@ public class TodoServiceImpl implements TodoService {
     @Cacheable(value = "todos", key = "#id")
     public Todo getTodoById(Long id) {
         log.info("No data in cache for todo with id {}, going to DB...", id);
-        Todo todo = todoRepository.findById(id);
-        if (todo == null) {
-            throw new TodoNotFoundException(id);
-        }
-        return todo;
+        return todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
     }
 
     @Override
@@ -67,10 +63,7 @@ public class TodoServiceImpl implements TodoService {
             }
     )
     public Todo updateTodo(Long id, UpdateTodo updateTodo) {
-        Todo existingTodo = todoRepository.findById(id);
-        if (existingTodo == null) {
-            throw new TodoNotFoundException(id);
-        }
+        Todo existingTodo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
 
         if (updateTodo.title() != null && !updateTodo.title().trim().isEmpty()) {
             existingTodo.setTitle(updateTodo.title());
@@ -84,7 +77,7 @@ public class TodoServiceImpl implements TodoService {
 
         existingTodo.setStatus(updateTodo.status());
 
-        return todoRepository.update(existingTodo);
+        return todoRepository.save(existingTodo);
     }
 
     @Override
@@ -95,9 +88,7 @@ public class TodoServiceImpl implements TodoService {
             }
     )
     public void deleteTodo(Long id) {
-        if (todoRepository.findById(id) == null) {
-            throw new TodoNotFoundException(id);
-        }
-        todoRepository.delete(id);
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
+        todoRepository.delete(todo);
     }
 }
