@@ -2,6 +2,7 @@ package com.emobile.springtodo.service;
 
 import com.emobile.springtodo.dto.CreateTodo;
 import com.emobile.springtodo.dto.UpdateTodo;
+import com.emobile.springtodo.exception.InvalidDataException;
 import com.emobile.springtodo.exception.TodoNotFoundException;
 import com.emobile.springtodo.model.Todo;
 import com.emobile.springtodo.model.TodoStatus;
@@ -84,9 +85,17 @@ class TodoServiceTest {
     }
 
     @Test
+    void testSaveTodo_shouldThrowInvalidDataException() {
+        CreateTodo createTodo = new CreateTodo("", "New Description", TodoStatus.TO_DO);
+
+        assertThrows(InvalidDataException.class, () -> todoService.saveTodo(createTodo));
+    }
+
+    @Test
     void testUpdateTodo() {
         UpdateTodo updateTodo = new UpdateTodo("Updated Task", "Updated Description", TodoStatus.COMPLETED);
         Todo existingTodo = new Todo(1L, "Task 1", "Description 1", TodoStatus.TO_DO);
+
         when(todoRepository.findById(1L)).thenReturn(existingTodo);
         when(todoRepository.update(any(Todo.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -95,8 +104,28 @@ class TodoServiceTest {
         assertNotNull(updatedTodo);
         assertEquals("Updated Task", updatedTodo.getTitle());
         assertEquals(TodoStatus.COMPLETED, updatedTodo.getStatus());
+
         verify(todoRepository, times(1)).findById(1L);
         verify(todoRepository, times(1)).update(any(Todo.class));
+    }
+
+    @Test
+    void testUpdateTodo_shouldThrowTodoNotFoundException() {
+        UpdateTodo updateTodo = new UpdateTodo("Updated Task", "Updated Description", TodoStatus.COMPLETED);
+
+        when(todoRepository.findById(1L)).thenReturn(null);
+
+        assertThrows(TodoNotFoundException.class, () -> todoService.updateTodo(1L, updateTodo));
+    }
+
+    @Test
+    void testUpdateTodo_shouldThrowInvalidDataException() {
+        UpdateTodo updateTodo = new UpdateTodo("", "Updated Description", TodoStatus.COMPLETED);
+        Todo existingTodo = new Todo(1L, "Task 1", "Description 1", TodoStatus.TO_DO);
+
+        when(todoRepository.findById(1L)).thenReturn(existingTodo);
+
+        assertThrows(InvalidDataException.class, () -> todoService.updateTodo(1L, updateTodo));
     }
 
     @Test
@@ -109,5 +138,12 @@ class TodoServiceTest {
 
         verify(todoRepository, times(1)).findById(1L);
         verify(todoRepository, times(1)).delete(1L);
+    }
+
+    @Test
+    void testDeleteTodo_shouldThrowTodoNotFoundException(){
+        when(todoRepository.findById(1L)).thenReturn(null);
+
+        assertThrows(TodoNotFoundException.class, () -> todoService.deleteTodo(1L));
     }
 }
