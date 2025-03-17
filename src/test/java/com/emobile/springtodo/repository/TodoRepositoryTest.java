@@ -5,7 +5,6 @@ import com.emobile.springtodo.model.TodoStatus;
 import com.emobile.springtodo.repository.contract.TodoRepository;
 import com.emobile.springtodo.repository.impl.TodoRepositoryImpl;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ class TodoRepositoryTest extends AbstractTestcontainers {
     private final TodoRepository todoRepository;
 
     public TodoRepositoryTest() {
-        this.todoRepository = new TodoRepositoryImpl(new JdbcTemplate(dataSource));
+        this.todoRepository = new TodoRepositoryImpl(sessionFactory);
     }
 
     @Test
