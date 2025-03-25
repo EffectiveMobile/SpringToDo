@@ -13,7 +13,7 @@ import java.time.Duration;
 
 /**
  * Конфигурация Redis для кэширования данных.
- * Этот класс настраивает RedisTemplate и RedisCacheConfiguration для работы с Redis.
+ * Этот класс настраивает {@link RedisTemplate} и {@link RedisCacheConfiguration} для работы с Redis.
  *
  * @author Мельников Никита
  */
@@ -22,23 +22,20 @@ import java.time.Duration;
 public class RedisConfig {
 
     /**
-     * Настройка RedisTemplate для сериализации ключей и значений.
+     * Настройка {@link RedisTemplate} для сериализации ключей и значений.
      * Используется JSON-сериализация для значений и строковая сериализация для ключей.
      *
      * @param connectionFactory фабрика подключения к Redis
-     * @return настроенный RedisTemplate
+     * @return настроенный {@link RedisTemplate}
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-
         return template;
     }
 
@@ -46,7 +43,7 @@ public class RedisConfig {
      * Настройка конфигурации кэша Redis.
      * Устанавливается время жизни записей в кэше (TTL) и отключается кэширование null-значений.
      *
-     * @return настроенная конфигурация RedisCacheConfiguration
+     * @return настроенная конфигурация {@link RedisCacheConfiguration}
      */
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
