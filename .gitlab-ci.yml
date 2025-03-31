@@ -1,0 +1,58 @@
+image: maven:latest
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+stages:
+  - build
+  - test
+  - package
+  - deploy
+  - notify
+
+build:
+  stage: build
+  only:
+    - dev
+    - merge_requests
+    - /^release\/.*$/
+  except:
+    - tags
+  script:
+    - 'mvn --settings $MAVEN_SETTINGS compile'
+  cache:
+    paths:
+      - ./target
+      - ./.m2
+
+test:
+  stage: test
+  only:
+    - dev
+    - merge_requests
+    - /^release\/.*$/
+  except:
+    - tags
+  script:
+    - 'mvn --settings $MAVEN_SETTINGS test'
+  cache:
+    paths:
+      - ./target
+      - ./.m2
+
+package:
+  stage: package
+  only:
+    - dev
+    - /^release\/.*$/
+  except:
+    - tags
+  script:
+    - 'mvn --settings $MAVEN_SETTINGS package -Dmaven.test.skip=true'
+  artifacts:
+    paths:
+      - target/*.jar
+  cache:
+    policy: pull
+    paths:
+      - ./target
+      - ./.m2
+
