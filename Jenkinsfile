@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'ohrimpavel/spring-todo-app'
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
+        MAVEN_HOME = tool name: 'Maven 3', type: 'Maven'
     }
 
     stages {
@@ -15,13 +16,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh "${MAVEN_HOME}/bin/mvn clean install"
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh "${MAVEN_HOME}/bin/mvn test"
             }
         }
 
