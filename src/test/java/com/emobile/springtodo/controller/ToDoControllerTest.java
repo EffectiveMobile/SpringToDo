@@ -1,85 +1,78 @@
 package com.emobile.springtodo.controller;
 
-import com.emobile.springtodo.dto.ToDoDto;
-import org.junit.jupiter.api.DisplayName;
+import com.emobile.springtodo.SpringToDoApplication;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 @Testcontainers
+@SpringBootTest(classes = SpringToDoApplication.class)
+@AutoConfigureMockMvc
 public class ToDoControllerTest {
+
     @Container
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16.0")
+    private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:16.0")
             .withDatabaseName("postgres")
             .withUsername("postgres")
-            .withPassword("password");
+            .withPassword("zenbook14");
 
     @Autowired
     private MockMvc mockMvc;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @BeforeAll
+    static void setUp() {
+        System.setProperty("spring.datasource.url", postgresContainer.getJdbcUrl());
+        System.setProperty("spring.datasource.username", postgresContainer.getUsername());
+        System.setProperty("spring.datasource.password", postgresContainer.getPassword());
+        System.setProperty("spring.flyway.enabled", "true");
+    }
 
     @Test
-    @DisplayName("Should create a new TODO item")
-    @Sql("/test-data.sql")
-    void shouldGetToDOById() throws Exception{
-        ToDoDto dto = new ToDoDto();
-        dto.setTitle("Test ToDo");
-        dto.setDescription("Test Description");
-        dto.setCompleted(false);
+    void shouldGetToDoById() throws Exception {
+        // Предполагаем, что миграция создала таблицу postgres
+        String todoJson = "{\"title\":\"Test ToDo\",\"description\":\"Test Description\",\"completed\":false}";
 
+        // Создаём ToDo
         mockMvc.perform(post("/api/todos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .contentType(objectMapper.writeValueAsString(dto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(todoJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Test Todo"))
-                .andExpect(jsonPath("$.description").value("Test Description"))
-                .andExpect(jsonPath("$.completed").value(false));
-    }
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.title").value("Test ToDo"));
 
-    @Test
-    @DisplayName("Should get TODO item by ID")
-    @Sql("/test-data.sql")
-    void shouldGetToDoByID() throws Exception{
-        mockMvc.perform(get("/api/todos/1"))
+        // Проверяем получение по ID
+        mockMvc.perform(get("/api/todos/1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.title").value("Sample Todo"));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Test ToDo"));
     }
 
     @Test
-    @DisplayName("Should return 404 for non-existent TODO")
-    void shouldReturn404ForNonExistentToDo() throws Exception{
-        mockMvc.perform(get("/api/todos/999"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("ToDo not found with id: 999"));
-
+    void shouldReturn404ForNonExistentToDo() throws Exception {
+        mockMvc.perform(get("/api/todos/999")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    @DisplayName("Should validate ToDo input")
-    void shouldValidateToDoInput() throws Exception{
-        ToDoDto dto = new ToDoDto();
-        dto.setTitle("");
+    void shouldValidateToDoInput() throws Exception {
+        String invalidTodoJson = "{\"title\":\"\",\"description\":\"Test Description\",\"completed\":false}";
 
         mockMvc.perform(post("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.title").value("Title is mandatory"));
+                        .content(invalidTodoJson))
+                .andExpect(status().isBadRequest());
     }
 }

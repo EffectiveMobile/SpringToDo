@@ -33,12 +33,12 @@ public class ToDoController implements ToDoAPI {
         return service.findAll(limit, offset);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ToDoDto update(@PathVariable Long id, @Valid @RequestBody ToDoDto dto){
         return service.update(id, dto);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
         service.delete(id);
     }
