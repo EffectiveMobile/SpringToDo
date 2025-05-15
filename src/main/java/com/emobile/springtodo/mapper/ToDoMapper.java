@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 @org.mapstruct.Mapper(componentModel = "spring")
 public interface ToDoMapper {
+   // @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     ToDoEntity toEntity(ToDoDto dto);
