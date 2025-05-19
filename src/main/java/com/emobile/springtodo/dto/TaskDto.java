@@ -1,12 +1,12 @@
 package com.emobile.springtodo.dto;
 
 import com.emobile.springtodo.model.Status;
+import com.emobile.springtodo.validator.CheckEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import com.emobile.springtodo.validator.CheckEnum;
 import lombok.NoArgsConstructor;
 
 
