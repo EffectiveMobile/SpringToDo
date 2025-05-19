@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 
-/// Custom validator that validates whether a given string value is a valid constant from a specified enum class.
+/**
+ * Custom validator that validates whether a given string value is a valid constant from a specified enum class.
+ */
 public class CheckEnumValidator implements ConstraintValidator<CheckEnum, String> {
 
 
@@ -32,7 +34,7 @@ public class CheckEnumValidator implements ConstraintValidator<CheckEnum, String
      * is invalid, it constructs a custom error message
      * </p>
      *
-     * @param value the value to be validated
+     * @param value   the value to be validated
      * @param context the validation context
      * @return {@code true} if the value is a valid enum constant, otherwise {@code false}
      */

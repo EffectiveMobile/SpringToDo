@@ -24,7 +24,7 @@ public class TaskRepository {
      * RowMapper implementation for TaskEntity
      */
     private final RowMapper<TaskEntity> taskRowMapper = (resultSet, rowNum) -> {
-        TaskEntity task =new TaskEntity();
+        TaskEntity task = new TaskEntity();
         task.setId(resultSet.getInt("id"));
         task.setTitle(resultSet.getString("title"));
         task.setDescription(resultSet.getString("description"));
@@ -36,7 +36,7 @@ public class TaskRepository {
     /**
      * Return all tasks with pagination support.
      *
-     * @param limit maximum number of tasks to return
+     * @param limit  maximum number of tasks to return
      * @param offset number of tasks to skip
      * @return list of tasks ordered by ID
      */
@@ -48,27 +48,27 @@ public class TaskRepository {
     /**
      * Finds tasks containing the specified title string.
      *
-     * @param title title pattern to search for (uses SQL LIKE pattern)
-     * @param limit maximum number of tasks to return
+     * @param title  title pattern to search for (uses SQL LIKE pattern)
+     * @param limit  maximum number of tasks to return
      * @param offset number of tasks to skip
      * @return list of matching tasks
      */
     public List<TaskEntity> findTaskByTitle(String title, Integer limit, Integer offset) {
         String sql = "SELECT * FROM tasks WHERE title LIKE ? LIMIT ? OFFSET ?";
-        return jdbcTemplate.query(sql, taskRowMapper,  "%"+ title + "%", limit, offset);
+        return jdbcTemplate.query(sql, taskRowMapper, "%" + title + "%", limit, offset);
     }
 
     /**
      * Finds tasks with the specified status.
      *
      * @param status status to filter by
-     * @param limit maximum number of tasks to return
+     * @param limit  maximum number of tasks to return
      * @param offset number of tasks to skip
      * @return list of tasks with matching status
      */
     public List<TaskEntity> findTaskByStatus(String status, Integer limit, Integer offset) {
         String sql = "SELECT * FROM tasks WHERE status = ? LIMIT ? OFFSET ?";
-        return jdbcTemplate.query(sql, taskRowMapper,  status, limit, offset);
+        return jdbcTemplate.query(sql, taskRowMapper, status, limit, offset);
     }
 
     /**
@@ -94,7 +94,7 @@ public class TaskRepository {
     /**
      * Updates the status of a task identified by its title.
      *
-     * @param title exact title of the task to update
+     * @param title  exact title of the task to update
      * @param status new status to set
      */
     public void editStatus(String title, Status status) {

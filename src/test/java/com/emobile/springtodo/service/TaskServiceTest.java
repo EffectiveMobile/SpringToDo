@@ -146,7 +146,7 @@ class TaskServiceTest {
                 .thenReturn(List.of(dto1, dto2));
 
         // When
-        List<TaskDto> result = taskService.getTaskByTitle(searchTitle, limit, offset);
+        List<TaskDto> result = taskService.getTaskByTitle(searchTitle, limit, offset).getContent();
 
         // Then
         assertEquals(2, result.size());
@@ -176,7 +176,7 @@ class TaskServiceTest {
                 .thenReturn(List.of(dto1, dto2));
 
         // When
-        List<TaskDto> result = taskService.getTasksByStatus(status, limit, offset);
+        List<TaskDto> result = taskService.getTasksByStatus(status, limit, offset).getContent();
 
         // Then
         assertEquals(2, result.size());
@@ -197,7 +197,7 @@ class TaskServiceTest {
         when(taskMapper.toDtoList(List.of())).thenReturn(List.of());
 
         // When
-        List<TaskDto> result = taskService.getTasksByStatus(status, 20, 0);
+        List<TaskDto> result = taskService.getTasksByStatus(status, 20, 0).getContent();
 
         // Then
         assertTrue(result.isEmpty());

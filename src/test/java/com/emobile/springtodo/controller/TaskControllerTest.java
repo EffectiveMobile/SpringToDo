@@ -5,16 +5,18 @@ import com.emobile.springtodo.model.Status;
 import com.emobile.springtodo.service.impl.TaskServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.shaded.com.github.dockerjava.core.MediaType;
 
-
 import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,73 +32,133 @@ class TaskControllerTest {
     @MockBean
     private TaskServiceImpl taskService;
 
-
     private final String BASE_URL = "/api/task";
-
 
     @Test
     @DisplayName("GET /api/task/showAll - Получение всех задач с пагинацией")
     void showAllTasks() throws Exception {
         //given
         String expectedJson = """
-                [
-                    {
-                        "title":"Task 1",
-                        "description":"Description 1",
-                        "status":"PENDING"
-                    },
-                    {
-                        "title":"Task 2",
-                        "description":"Description 2",
-                        "status":"IN_PROGRESS"}]
+                {
+                            "content": [
+                                {
+                                    "title": "Task 1",
+                                    "description": "Description 1",
+                                    "status": "PENDING"
+                                },
+                                {
+                                    "title": "Task 2",
+                                    "description": "Description 2",
+                                    "status": "IN_PROGRESS"
+                                }
+                            ],
+                            "pageable": {
+                                "sort": {
+                                    "empty": true,
+                                    "sorted": false,
+                                    "unsorted": true
+                                },
+                                "offset": 0,
+                                "pageNumber": 0,
+                                "pageSize": 2,
+                                "paged": true,
+                                "unpaged": false
+                            },
+                            "last": true,
+                            "totalPages": 1,
+                            "totalElements": 2,
+                            "size": 2,
+                            "number": 0,
+                            "sort": {
+                                "empty": true,
+                                "sorted": false,
+                                "unsorted": true
+                            },
+                            "first": true,
+                            "numberOfElements": 2,
+                            "empty": false
+                        }
                 """;
 
-        List<TaskDto> tasks = Arrays.asList(
+        Page<TaskDto> tasks = new PageImpl<>(Arrays.asList(
                 new TaskDto("Task 1", "Description 1", "PENDING"),
                 new TaskDto("Task 2", "Description 2", "IN_PROGRESS")
-        );
+        ), PageRequest.of(0, 2), 2);
         when(taskService.getAllTasks(2, 0)).thenReturn(tasks);
 
-        //when-then
-        mockMvc.perform(get(BASE_URL + "/showAll")
+        //when
+        String actualJson = mockMvc.perform(get(BASE_URL + "/showAll")
                         .param("offset", "0")
                         .param("limit", "2"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
-    }
+                .andReturn().getResponse().getContentAsString();
 
+        //then
+        JSONAssert.assertEquals(expectedJson, actualJson, false);
+    }
 
     @Test
     @DisplayName("GET /api/task/show/byTitle - Поиск задач по названию")
     void showTaskByTitleTest() throws Exception {
         //given
         String expectedJson = """
-                [
-                    {
-                        "title":"Task 1",
-                        "description":"Description 1",
-                        "status":"PENDING"
-                    },
-                    {
-                        "title":"Task 2",
-                        "description":"Description 2",
-                        "status":"IN_PROGRESS"}
-                ]
+                {
+                            "content": [
+                                {
+                                    "title": "Task 1",
+                                    "description": "Description 1",
+                                    "status": "PENDING"
+                                },
+                                {
+                                    "title": "Task 2",
+                                    "description": "Description 2",
+                                    "status": "IN_PROGRESS"
+                                }
+                            ],
+                            "pageable": {
+                                "sort": {
+                                    "empty": true,
+                                    "sorted": false,
+                                    "unsorted": true
+                                },
+                                "offset": 0,
+                                "pageNumber": 0,
+                                "pageSize": 2,
+                                "paged": true,
+                                "unpaged": false
+                            },
+                            "last": true,
+                            "totalPages": 1,
+                            "totalElements": 2,
+                            "size": 2,
+                            "number": 0,
+                            "sort": {
+                                "empty": true,
+                                "sorted": false,
+                                "unsorted": true
+                            },
+                            "first": true,
+                            "numberOfElements": 2,
+                            "empty": false
+                        }
                 """;
 
-        List<TaskDto> tasks = Arrays.asList(
+        Page<TaskDto> tasks = new PageImpl<>(Arrays.asList(
                 new TaskDto("Task 1", "Description 1", "PENDING"),
                 new TaskDto("Task 2", "Description 2", "IN_PROGRESS")
-        );
+        ), PageRequest.of(0, 2), 2);
         when(taskService.getTaskByTitle("Task", 2, 0)).thenReturn(tasks);
 
-        //when-then
-        mockMvc.perform(get(BASE_URL + "/show/byTitle")
+        //when
+        String actualJson = mockMvc.perform(get(BASE_URL + "/show/byTitle")
                         .param("offset", "0")
                         .param("limit", "2")
                         .param("title", "Task"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
+                .andReturn().getResponse().getContentAsString();
+
+        //then
+        JSONAssert.assertEquals(expectedJson, actualJson, false);
     }
 
     @Test
@@ -110,7 +172,6 @@ class TaskControllerTest {
                 .andExpect(content().string("Task deleted!"));
         verify(taskService, times(1)).deleteTaskByTitle("Task");
     }
-
 
     @Test
     @DisplayName("POST /api/task/create - Создание новой задачи")
@@ -132,14 +193,14 @@ class TaskControllerTest {
     @DisplayName("PATCH /api/task/edit/{title}/status - Изменение статуса задачи")
     void editStatusTest() throws Exception {
         // given
-        doNothing().when(taskService).editStatus("Task",Status.COMPLETED);
+        doNothing().when(taskService).editStatus("Task", Status.COMPLETED);
 
         //when-then
         mockMvc.perform(patch(BASE_URL + "/edit/Task/status")
-                        .param("newStatus","COMPLETED"))
+                        .param("newStatus", "COMPLETED"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Status has been changed!"));
-        verify(taskService, times(1)).editStatus("Task",Status.COMPLETED);
+        verify(taskService, times(1)).editStatus("Task", Status.COMPLETED);
     }
 
     @Test
@@ -147,31 +208,62 @@ class TaskControllerTest {
     void getTasksByStatusTest() throws Exception {
         //given
         String expectedJson = """
-                [
-                    {
-                        "title":"Task 1",
-                        "description":"Description 1",
-                        "status":"PENDING"
-                    },
-                    {
-                        "title":"Task 2",
-                        "description":"Description 2",
-                        "status":"IN_PROGRESS"}]
+                {
+                            "content": [
+                                {
+                                    "title": "Task 1",
+                                    "description": "Description 1",
+                                    "status": "PENDING"
+                                },
+                                {
+                                    "title": "Task 2",
+                                    "description": "Description 2",
+                                    "status": "IN_PROGRESS"
+                                }
+                            ],
+                            "pageable": {
+                                "sort": {
+                                    "empty": true,
+                                    "sorted": false,
+                                    "unsorted": true
+                                },
+                                "offset": 0,
+                                "pageNumber": 0,
+                                "pageSize": 2,
+                                "paged": true,
+                                "unpaged": false
+                            },
+                            "last": true,
+                            "totalPages": 1,
+                            "totalElements": 2,
+                            "size": 2,
+                            "number": 0,
+                            "sort": {
+                                "empty": true,
+                                "sorted": false,
+                                "unsorted": true
+                            },
+                            "first": true,
+                            "numberOfElements": 2,
+                            "empty": false
+                        }
                 """;
 
-        List<TaskDto> tasks = Arrays.asList(
+        Page<TaskDto> tasks = new PageImpl<>(Arrays.asList(
                 new TaskDto("Task 1", "Description 1", "PENDING"),
                 new TaskDto("Task 2", "Description 2", "IN_PROGRESS")
-        );
+        ), PageRequest.of(0, 2), 2);
         when(taskService.getTasksByStatus(Status.PENDING, 2, 0)).thenReturn(tasks);
 
-        //when-then
-        mockMvc.perform(get(BASE_URL + "/show/byStatus")
+        //when
+        String actualJson = mockMvc.perform(get(BASE_URL + "/show/byStatus")
                         .param("offset", "0")
                         .param("limit", "2")
                         .param("status", "PENDING"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
-    }
+                .andReturn().getResponse().getContentAsString();
 
+        //then
+        JSONAssert.assertEquals(expectedJson, actualJson, false);
+    }
 }

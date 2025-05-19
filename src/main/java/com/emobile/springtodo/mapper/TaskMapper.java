@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Mapper interface for converting between Task-related DTOs and Entities.
  */
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,  unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
 
     /**
